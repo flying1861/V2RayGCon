@@ -178,34 +178,32 @@ namespace V2RayGCon.Resource.Resx {
         
         /// <summary>
         ///   查找类似 {
-        ///  &quot;emptyInOut&quot;: {
-        ///    &quot;inbound&quot;: {},
-        ///    &quot;outbound&quot;: {}
+        ///  &quot;inbSimSock&quot;: {
+        ///    &quot;tag&quot;: &quot;agentin&quot;,
+        ///    &quot;port&quot;: 1080,
+        ///    &quot;listen&quot;: &quot;127.0.0.1&quot;,
+        ///    &quot;protocol&quot;: &quot;socks&quot;,
+        ///    &quot;settings&quot;: {}
         ///  },
-        ///  &quot;dtrMTProto&quot;: {
-        ///    &quot;inboundDetour&quot;: [
-        ///      {
-        ///        &quot;protocol&quot;: &quot;mtproto&quot;,
-        ///        &quot;port&quot;: &quot;443&quot;,
-        ///        &quot;tag&quot;: &quot;tg-in&quot;,
-        ///        &quot;settings&quot;: {
+        ///  &quot;outbVmess&quot;: {
+        ///    &quot;protocol&quot;: &quot;vmess&quot;,
+        ///    &quot;settings&quot;: {
+        ///      &quot;vnext&quot;: [
+        ///        {
+        ///          &quot;address&quot;: &quot;&quot;,
+        ///          &quot;port&quot;: 1234,
         ///          &quot;users&quot;: [
-        ///            {}
+        ///            {
+        ///              &quot;id&quot;: &quot;&quot;,
+        ///              &quot;alterId&quot;: 32,
+        ///              &quot;security&quot;: &quot;auto&quot;
+        ///            }
         ///          ]
         ///        }
-        ///      }
-        ///    ],
-        ///    &quot;outboundDetour&quot;: [
-        ///      {
-        ///        &quot;protocol&quot;: &quot;mtproto&quot;,
-        ///        &quot;tag&quot;: &quot;tg-out&quot;,
-        ///        &quot;settings&quot;: {}
-        ///      }
-        ///    ],
-        ///    &quot;routing&quot;: {
-        ///      &quot;strategy&quot;: &quot;rules&quot;,
-        ///      &quot;settings&quot;: {
-        ///        &quot; [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///      ]
+        ///    },
+        ///    &quot;tag&quot;: &quot;agentout&quot;,
+        ///    &quot;streamSettings [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string config_tpl {
             get {
@@ -340,7 +338,7 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似 log.txt 的本地化字符串。
+        ///   查找类似 vgclog.txt 的本地化字符串。
         /// </summary>
         internal static string LogFileName {
             get {
@@ -462,6 +460,28 @@ namespace V2RayGCon.Resource.Resx {
         internal static string PkgWin64 {
             get {
                 return ResourceManager.GetString("PkgWin64", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 {
+        ///  &quot;ProxySetter.dll&quot;: &quot;auto set system proxy&quot;
+        ///} 的本地化字符串。
+        /// </summary>
+        internal static string PluginsDebugList {
+            get {
+                return ResourceManager.GetString("PluginsDebugList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 {
+        ///  &quot;880efe3b61cb4b5d0cf53c181465872cf8c0bd7c8d941a00d3310655a0f1f483&quot;: &quot;ProxySetter v0.0.1 release 2018.11.11&quot;
+        ///} 的本地化字符串。
+        /// </summary>
+        internal static string PluginsReleaseList {
+            get {
+                return ResourceManager.GetString("PluginsReleaseList", resourceCulture);
             }
         }
         

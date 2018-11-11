@@ -11,9 +11,8 @@ namespace V2RayGCon.Controller.FormMainComponent
     {
         Service.Cache cache;
         Service.Servers servers;
-        Service.Setting setting;
-
-        MenuStrip menuContainer;
+        readonly Service.Setting setting;
+        readonly MenuStrip menuContainer;
 
         public MenuItemsServer(
             // for invoke ui refresh
@@ -226,7 +225,7 @@ namespace V2RayGCon.Controller.FormMainComponent
                 SortServerListBySpeedTestResult);
         }
 
-        private void SortServerListBySummary()
+        void SortServerListBySummary()
         {
             var list = servers.GetServerList().Where(s => s.isSelected).ToList();
             if (list.Count < 2)
@@ -238,7 +237,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             RemoveAllControlsAndRefreshFlyPanel();
         }
 
-        void SortServerItemList(
+        static void SortServerItemList(
              ref List<Controller.CoreServerCtrl> list,
              Comparison<Controller.CoreServerCtrl> comparer)
         {

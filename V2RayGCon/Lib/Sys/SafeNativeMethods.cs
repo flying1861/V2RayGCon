@@ -21,11 +21,6 @@ namespace V2RayGCon.Lib.Sys
         public static extern bool FreeLibrary(IntPtr hModule);
         #endregion
 
-        #region proxy reg editer
-        [DllImport("wininet.dll")]
-        public static extern bool InternetSetOption(IntPtr hInternet, int dwOption, IntPtr lpBuffer, int dwBufferLength);
-        #endregion
-
         #region ui
         [DllImport("User32.dll")]
         public static extern IntPtr GetDC(IntPtr hwnd);

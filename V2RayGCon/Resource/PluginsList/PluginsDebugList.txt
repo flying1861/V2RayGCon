@@ -1,0 +1,3 @@
+﻿{
+  "ProxySetter.dll": "auto set system proxy"
+}

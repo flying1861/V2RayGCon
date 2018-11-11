@@ -66,6 +66,8 @@ namespace V2RayGCon.Views.WinForms
             SetTitle(configer.GetAlias());
             ToggleToolsPanel(isShowPanel);
 
+            chkIsV4.Checked = setting.isUseV4;
+
             var editor = configer
                 .GetComponent<Controller.ConfigerComponet.Editor>()
                 .GetEditor();

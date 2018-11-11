@@ -141,7 +141,7 @@ namespace V2RayGCon.Controller.ConfigerComponet
             }
             catch (KeyNotFoundException) { }
 
-            Lib.Utils.CombineConfig(ref config, vmess);
+            Lib.Utils.MergeJson(ref config, vmess);
         }
 
         void EmptyAllControl()

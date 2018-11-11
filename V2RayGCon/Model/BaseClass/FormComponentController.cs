@@ -1,8 +1,8 @@
 ﻿namespace V2RayGCon.Model.BaseClass
 {
-    class FormComponentController : IFormComponentController
+    public class FormComponentController : IFormComponentController
     {
-        protected FormController container;
+        protected FormController container=null;
 
         // bind UI controls with component
         public void Bind(FormController container)
@@ -12,6 +12,10 @@
 
         public T GetContainer<T>() where T : FormController
         {
+            if (this.container == null)
+            {
+                return null;
+            }
             return this.container as T;
         }
     }

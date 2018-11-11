@@ -9,6 +9,7 @@ using System.Linq;
 using System.Management;
 using System.Net;
 using System.Net.Sockets;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -20,240 +21,69 @@ namespace V2RayGCon.Lib
 {
     public static class Utils
     {
-        #region pac
-        public static Model.Data.Enum.Overlaps Overlaps(long[] a, long[] b)
-        {
-            if (a.Length != b.Length
-                || a.Length != 2
-                || a[0] > a[1]
-                || b[0] > b[1]
-                || b[0] > a[1])
-            {
-                // skip if error happened
-                return Model.Data.Enum.Overlaps.None;
-            }
-
-            if (b[0] > a[0])
-            {
-                if (b[1] >= a[1])
-                {
-                    return Model.Data.Enum.Overlaps.Right;
-                }
-                return Model.Data.Enum.Overlaps.Middle;
-            }
-
-            // b[0] <= a[0]
-
-            if (b[1] >= a[1])
-            {
-                return Model.Data.Enum.Overlaps.All;
-            }
-
-            if (b[1] >= a[0])
-            {
-                return Model.Data.Enum.Overlaps.Left;
-            }
-
-            return Model.Data.Enum.Overlaps.None;
-        }
-
-        public static bool IsProxyNotSet(Model.Data.ProxyRegKeyValue proxySetting)
-        {
-            if (!string.IsNullOrEmpty(proxySetting.autoConfigUrl))
-            {
-                return false;
-            }
-
-            if (proxySetting.proxyEnable)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// return null if fail
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
-        public static Dictionary<string, string> ParseUrlQueryIntoParams(string url)
-        {
-            if (string.IsNullOrEmpty(url))
-            {
-                return null;
-            }
-
-            Dictionary<string, string> arguments = null;
-            try
-            {
-                var query = new Uri(url).Query;
-                arguments = query
-                 .Substring(1) // Remove '?'
-                 .Split('&')
-                 .Select(q => q.Split('='))
-                 .ToDictionary(q => q.FirstOrDefault(), q => q.Skip(1).FirstOrDefault());
-            }
-            catch { }
-
-            return arguments;
-        }
-
-        /// <summary>
-        /// return null if fail
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
-        public static Model.Data.PacUrlParams GetProxyParamsFromUrl(string url)
-        {
-            // https://stackoverflow.com/questions/2884551/get-individual-query-parameters-from-uri
-            var arguments = ParseUrlQueryIntoParams(url);
-
-            if (arguments == null)
-            {
-                return null;
-            }
-
-            // e.g. http://localhost:3000/pac/?&port=5678&ip=1.2.3.4&proto=socks&type=whitelist&key=rnd
-
-            arguments.TryGetValue("mime", out string mime);
-            arguments.TryGetValue("debug", out string debug);
-            arguments.TryGetValue("ip", out string ip);
-            arguments.TryGetValue("port", out string portStr);
-            arguments.TryGetValue("type", out string type);
-            arguments.TryGetValue("proto", out string proto);
-
-            var port = Lib.Utils.Str2Int(portStr);
-
-            if (!IsIP(ip) || port < 0 || port > 65535)
-            {
-                return null;
-            }
-
-            var isSocks = proto == null ? false : proto.ToLower() == "socks";
-            var isWhiteList = type == null ? false : type.ToLower() == "whitelist";
-            var isDebug = debug == null ? false : debug.ToLower() == "true";
-
-            return new Model.Data.PacUrlParams
-            {
-                ip = ip,
-                port = port,
-                isSocks = isSocks,
-                isWhiteList = isWhiteList,
-                isDebug = isDebug,
-                mime = mime ?? "",
-            };
-        }
-
-        public static bool IsCidr(string address)
-        {
-            var parts = address.Split('/');
-
-            if (parts.Length != 2)
-            {
-                return false;
-            }
-
-            if (!IsIP(parts[0]))
-            {
-                return false;
-            }
-            var mask = Str2Int(parts[1]);
-            return mask >= 0 && mask <= 32;
-        }
-
-
-
-        public static string Long2Ip(long number)
-        {
-            if (number < 0 || number >= 1L << 32)
-            {
-                return "0.0.0.0";
-            }
-
-            var ips = new List<long>();
-            for (int i = 0; i < 4; i++)
-            {
-                ips.Add(number % 256);
-                number /= 256;
-            }
-            ips.Reverse();
-            return string.Join(".", ips);
-        }
-
-        public static long[] Cidr2RangeArray(string cidrString)
-        {
-            var cidr = cidrString.Split('/');
-            var begin = IP2Long(cidr[0]);
-            var end = (1L << (32 - Str2Int(cidr[1]))) + begin;
-            return new long[] { begin, Math.Max(Math.Min(end - 1, (1L << 32) - 1), begin) };
-        }
-
-        public static List<long[]> CompactCidrList(ref List<long[]> cidrList)
-        {
-            if (cidrList == null || cidrList.Count <= 0)
-            {
-                return new List<long[]>();
-                // throw new System.ArgumentException("Range list is empty!");
-            }
-
-            cidrList.Sort((a, b) => a[0].CompareTo(b[0]));
-
-            var result = new List<long[]>();
-            var curRange = cidrList[0];
-            foreach (var range in cidrList)
-            {
-                if (range.Length != 2)
-                {
-                    throw new System.ArgumentException("Range must have 2 number.");
-                }
-
-                if (range[0] > range[1])
-                {
-                    throw new ArgumentException("range[0] > range[1]. ");
-                }
-
-                if (range[0] <= curRange[1] + 1)
-                {
-                    curRange[1] = Math.Max(range[1], curRange[1]);
-                }
-                else
-                {
-                    result.Add(curRange);
-                    curRange = range;
-                }
-            }
-            result.Add(curRange);
-            return result;
-        }
-
-        public static long IP2Long(string ip)
-        {
-            var c = ip.Split('.')
-                .Select(el => (long)Str2Int(el))
-                .ToList();
-
-            if (c.Count < 4)
-            {
-                throw new System.ArgumentException("Not a valid ip.");
-            }
-
-            return 256 * (256 * (256 * +c[0] + +c[1]) + +c[2]) + +c[3];
-        }
-
-        public static bool IsIP(string address)
-        {
-            if (string.IsNullOrEmpty(address))
-            {
-                return false;
-            }
-
-            return Regex.IsMatch(address, @"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
-        }
-
-        #endregion
 
         #region Json
+        /// <summary>
+        /// return null if fail
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public static T Clone<T>(T a) where T : class
+        {
+            if (a == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                return JsonConvert.DeserializeObject<T>(
+                    JsonConvert.SerializeObject(a));
+            }
+            catch { }
+            return null;
+        }
+
+        /// <summary>
+        /// return null if fail
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        public static T DeserializeObject<T>(string content) where T : class
+        {
+            if (string.IsNullOrEmpty(content))
+            {
+                return null;
+            }
+
+            try
+            {
+                var result = JsonConvert.DeserializeObject<T>(content);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+            catch { }
+            return null;
+        }
+
+        /// <summary>
+        /// return null if fail
+        /// </summary>
+        /// <param name="serializeObject"></param>
+        /// <returns></returns>
+        public static string SerializeObject(object serializeObject)
+        {
+            if (serializeObject == null)
+            {
+                return null;
+            }
+            return JsonConvert.SerializeObject(serializeObject);
+        }
+
         public static string GetConfigRoot(bool isInbound, bool isV4)
         {
             return (isInbound ? "inbound" : "outbound")
@@ -625,11 +455,11 @@ namespace V2RayGCon.Lib
 
         public static void CombineConfig(ref JObject body, JObject mixin)
         {
-            // in(out)Dtr
-
             JObject backup = JObject.Parse(@"{}");
 
             foreach (var key in new string[] {
+                    "inbounds",
+                    "outbounds",
                     "inboundDetour",
                     "outboundDetour",
                     "routing.settings.rules"})
@@ -876,8 +706,6 @@ namespace V2RayGCon.Lib
             return null;
         }
 
-
-
         public static Model.Data.Vmess ConfigString2Vmess(string config)
         {
             JObject json;
@@ -892,17 +720,22 @@ namespace V2RayGCon.Lib
 
             var GetStr = GetStringByPrefixAndKeyHelper(json);
 
-            Model.Data.Vmess vmess = new Model.Data.Vmess();
-            vmess.v = "2";
-            vmess.ps = GetStr("v2raygcon", "alias");
+            Model.Data.Vmess vmess = new Model.Data.Vmess
+            {
+                v = "2",
+                ps = GetStr("v2raygcon", "alias")
+            };
 
-            var prefix = "outbound.settings.vnext.0";
+            var isUseV4 = (GetStr("outbounds.0", "protocol")?.ToLower()) == "vmess";
+            var root = isUseV4 ? "outbounds.0" : "outbound";
+
+            var prefix = root + "." + "settings.vnext.0";
             vmess.add = GetStr(prefix, "address");
             vmess.port = GetStr(prefix, "port");
             vmess.id = GetStr(prefix, "users.0.id");
             vmess.aid = GetStr(prefix, "users.0.alterId");
 
-            prefix = "outbound.streamSettings";
+            prefix = root + "." + "streamSettings";
             vmess.net = GetStr(prefix, "network");
             vmess.type = GetStr(prefix, "kcpSettings.header.type");
             vmess.tls = GetStr(prefix, "security");
@@ -917,13 +750,14 @@ namespace V2RayGCon.Lib
                     try
                     {
                         vmess.path = GetStr(prefix, "httpSettings.path");
-                        var hosts = json["outbound"]["streamSettings"]["httpSettings"]["host"];
+                        var hosts = isUseV4 ?
+                            json["outbounds"][0]["streamSettings"]["httpSettings"]["host"] :
+                            json["outbound"]["streamSettings"]["httpSettings"]["host"];
                         vmess.host = JArray2Str(hosts as JArray);
                     }
                     catch { }
                     break;
             }
-
             return vmess;
         }
 
@@ -1047,7 +881,7 @@ namespace V2RayGCon.Lib
             return elasped;
         }
 
-        static IPEndPoint _defaultLoopbackEndpoint = new IPEndPoint(IPAddress.Loopback, port: 0);
+        static readonly IPEndPoint _defaultLoopbackEndpoint = new IPEndPoint(IPAddress.Loopback, port: 0);
         public static int GetFreeTcpPort()
         {
             // https://stackoverflow.com/questions/138043/find-the-next-tcp-port-in-net
@@ -1129,6 +963,61 @@ namespace V2RayGCon.Lib
         #endregion
 
         #region files
+        static bool IsTrustedPluginFileName(string path)
+        {
+            try
+            {
+                var fileName = Path.GetFileName(path);
+                return JsonConvert
+                 .DeserializeObject<Dictionary<string, string>>(StrConst.PluginsDebugList)
+                 .Keys
+                 .ToList()
+                 .Contains(fileName);
+            }
+            catch { }
+            return false;
+        }
+
+        static bool IsTrustedPluginSha256Sum(string sha256Sum)
+            => JsonConvert
+                 .DeserializeObject<Dictionary<string, string>>(StrConst.PluginsReleaseList)
+                 .Keys
+                 .ToList()
+                 .Contains(sha256Sum);
+
+        public static bool IsTrustedPlugin(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                return false;
+            }
+
+#if DEBUG
+            return IsTrustedPluginFileName(path);
+#else
+            return IsTrustedPluginSha256Sum(GetChecksum(path));
+#endif
+        }
+
+        static string GetChecksum(string file)
+        {
+            // http://peterkellner.net/2010/11/24/efficiently-generating-sha256-checksum-for-files-using-csharp/
+            try
+            {
+                using (FileStream stream = File.OpenRead(file))
+                {
+                    var sha = new SHA256Managed();
+                    byte[] checksum = sha.ComputeHash(stream);
+                    return BitConverter
+                        .ToString(checksum)
+                        .Replace("-", String.Empty)
+                        .ToLower();
+                }
+            }
+            catch { }
+            return string.Empty;
+        }
+
         public static string GetSysAppDataFolder()
         {
             var appData = System.Environment.GetFolderPath(
@@ -1162,7 +1051,7 @@ namespace V2RayGCon.Lib
         {
             var crypt = new System.Security.Cryptography.SHA256Managed();
             var hash = new System.Text.StringBuilder();
-            byte[] crypto = crypt.ComputeHash(Encoding.UTF8.GetBytes(randomString));
+            byte[] crypto = crypt.ComputeHash(Encoding.UTF8.GetBytes(randomString ?? string.Empty));
             foreach (byte theByte in crypto)
             {
                 hash.Append(theByte.ToString("x2"));
@@ -1508,6 +1397,8 @@ namespace V2RayGCon.Lib
                 StrConst.config_min,
                 StrConst.config_tpl,
                 StrConst.config_pkg,
+                StrConst.PluginsDebugList,
+                StrConst.PluginsReleaseList,
             };
         }
         #endregion

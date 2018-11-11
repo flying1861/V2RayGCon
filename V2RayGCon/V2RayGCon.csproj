@@ -71,6 +71,12 @@
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>V2RayGCon.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DotNetZip, Version=1.11.0.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetZip.1.11.0\lib\net20\DotNetZip.dll</HintPath>
@@ -117,6 +123,7 @@
     <Compile Include="Controller\ConfigerComponent\Quick.cs" />
     <Compile Include="Controller\OptionComponent\OptionComponentController.cs" />
     <Compile Include="Controller\OptionComponent\Import.cs" />
+    <Compile Include="Controller\OptionComponent\TabPlugin.cs" />
     <Compile Include="Controller\OptionComponent\TabSetting.cs" />
     <Compile Include="Controller\OptionComponent\Subscription.cs" />
     <Compile Include="Controller\FormOptionCtrl.cs" />
@@ -136,17 +143,13 @@
     <Compile Include="Model\BaseClass\IFormComponentController.cs" />
     <Compile Include="Model\BaseClass\FormController.cs" />
     <Compile Include="Controller\ConfigerComponent\ConfigerComponentController.cs" />
-    <Compile Include="Model\Data\PacCustomHeader.cs" />
-    <Compile Include="Model\Data\PacUrlParams.cs" />
-    <Compile Include="Model\Data\ProxyRegKeyValue.cs" />
-    <Compile Include="Model\Data\PacServerSettings.cs" />
+    <Compile Include="Model\Data\PluginInfoItem.cs" />
     <Compile Include="Model\Data\ServerTracker.cs" />
     <Compile Include="Model\Data\UserSettings.cs" />
-    <Compile Include="Resource\Resx\StrConst.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StrConst.resx</DependentUpon>
-    </Compile>
+    <Compile Include="Model\Plugin\Apis\ApiServersService.cs" />
+    <Compile Include="Model\Plugin\Apis\ApiSettingService.cs" />
+    <Compile Include="Model\Plugin\Apis\ApiUtils.cs" />
+    <Compile Include="Model\Plugin\Sandboxer.cs" />
     <Compile Include="Service\Core.cs" />
     <Compile Include="Model\BaseClass\ICacheComponent.cs" />
     <Compile Include="Model\BaseClass\FormComponentController.cs" />
@@ -154,6 +157,8 @@
     <Compile Include="Model\BaseClass\SingletonService.cs" />
     <Compile Include="Model\Data\ImportItem.cs" />
     <Compile Include="Service\Launcher.cs" />
+    <Compile Include="Model\Plugin\ApiServ.cs" />
+    <Compile Include="Service\PluginsServer.cs" />
     <Compile Include="Views\UserControls\ImportUI.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -165,6 +170,12 @@
     <Compile Include="Model\Data\LockValuePair.cs" />
     <Compile Include="Controller\CoreServerCtrl.cs" />
     <Compile Include="Model\Data\SubscriptionItem.cs" />
+    <Compile Include="Views\UserControls\PluginInfoUI.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\UserControls\PluginInfoUI.Designer.cs">
+      <DependentUpon>PluginInfoUI.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserControls\ServerUI.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -190,6 +201,11 @@
     <Compile Include="Model\Data\Enum.cs" />
     <Compile Include="Model\Data\Shadowsocks.cs" />
     <Compile Include="Model\Data\Table.cs" />
+    <Compile Include="Resource\Resx\StrConst.Designer.cs">
+      <DependentUpon>StrConst.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resource\Resx\I18N.zh-CN.Designer.cs">
       <DependentUpon>I18N.zh-CN.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -279,6 +295,12 @@
     <Compile Include="Views\WinForms\FormSimAddVmessClient.Designer.cs">
       <DependentUpon>FormSimAddVmessClient.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Views\UserControls\PluginInfoUI.resx">
+      <DependentUpon>PluginInfoUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\UserControls\PluginInfoUI.zh-CN.resx">
+      <DependentUpon>PluginInfoUI.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\UserControls\ServerUI.resx">
       <DependentUpon>ServerUI.cs</DependentUpon>
     </EmbeddedResource>
@@ -315,8 +337,8 @@
     </Compile>
     <EmbeddedResource Include="Resource\Resx\StrConst.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <SubType>Designer</SubType>
       <LastGenOutput>StrConst.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resource\Resx\I18N.zh-CN.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -325,6 +347,7 @@
     <EmbeddedResource Include="Resource\Resx\I18N.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>I18N.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\WinForms\FormBatchModifyServerSetting.resx">
       <DependentUpon>FormBatchModifyServerSetting.cs</DependentUpon>
@@ -370,6 +393,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\WinForms\FormOption.zh-CN.resx">
       <DependentUpon>FormOption.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\WinForms\FormQRCode.resx">
       <DependentUpon>FormQRCode.cs</DependentUpon>
@@ -404,6 +428,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="V2RayGCon.snk" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resource\Icon\icon_dark.ico" />
@@ -413,6 +438,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon_dark.ico" />
+    <Content Include="Resource\PluginsList\PluginsDebugList.txt" />
+    <Content Include="Resource\PluginsList\PluginsReleaseList.txt" />
+    <None Include="Resource\Icon\TaskTray\Module_16x.png" />
     <None Include="Resource\Icon\ServerUI\StepOverArrow_16x.png" />
     <None Include="Resource\Icon\ServerUI\StepBackArrow_16x.png" />
     <None Include="Resource\Icon\ServerUI\GlyphUp_16x.png" />
@@ -441,6 +469,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resource\Icon\FormMainToolStrip\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VgcPlugin\VgcPlugin.csproj">
+      <Project>{b3cf9873-afbc-4703-8a3b-06d39fd761b9}</Project>
+      <Name>VgcPlugin</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

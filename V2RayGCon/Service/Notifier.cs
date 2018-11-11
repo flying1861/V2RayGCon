@@ -41,6 +41,32 @@ namespace V2RayGCon.Service
         }
 #endif
 
+        ToolStripMenuItem oldPluginMenu = null;
+        /// <summary>
+        /// null means delete menu
+        /// </summary>
+        /// <param name="pluginMenu"></param>
+        public void UpdatePluginMenu(ToolStripMenuItem pluginMenu)
+        {
+            RemoveOldPluginMenu();
+            if (pluginMenu == null)
+            {
+                return;
+            }
+
+            oldPluginMenu = pluginMenu;
+            ni.ContextMenuStrip.Items.Insert(2, oldPluginMenu);
+        }
+
+        private void RemoveOldPluginMenu()
+        {
+            if (this.oldPluginMenu != null)
+            {
+                ni.ContextMenuStrip.Items.Remove(this.oldPluginMenu);
+            }
+            this.oldPluginMenu = null;
+        }
+
         public void Cleanup()
         {
             ni.Visible = false;
@@ -52,19 +78,11 @@ namespace V2RayGCon.Service
         void OnRequireNotifyTextUpdateHandler(object sender, EventArgs args)
         {
             var servInfo = setting.runningServerSummary;
-            var text = string.Empty;
-
-            if (!string.IsNullOrEmpty(servInfo))
-            {
-                text += servInfo;
-            }
-
-            UpdateNotifyText(text);
+            UpdateNotifyText(servInfo);
         }
 
         private void UpdateNotifyText(string rawText)
         {
-            // https://stackoverflow.com/questions/579665/how-can-i-show-a-systray-tooltip-longer-than-63-chars
             var text = string.IsNullOrEmpty(rawText) ?
                 I18N.Description :
                 Lib.Utils.CutStr(rawText, 127);
@@ -74,6 +92,7 @@ namespace V2RayGCon.Service
                 return;
             }
 
+            // https://stackoverflow.com/questions/579665/how-can-i-show-a-systray-tooltip-longer-than-63-chars
             Type t = typeof(NotifyIcon);
             BindingFlags hidden = BindingFlags.NonPublic | BindingFlags.Instance;
             t.GetField("text", hidden).SetValue(ni, text);

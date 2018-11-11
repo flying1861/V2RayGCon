@@ -3,7 +3,7 @@ using System.Timers;
 
 namespace V2RayGCon.Lib.Sys
 {
-    class CancelableTimeout
+    public class CancelableTimeout
     {
         Timer timer;
         readonly int TIMEOUT;

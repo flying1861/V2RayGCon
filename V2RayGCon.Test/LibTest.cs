@@ -13,48 +13,39 @@ namespace V2RayGCon.Test
     public class LibTest
     {
         [DataTestMethod]
-        [DataRow("0.0.0.0/32", "0.0.0.0,0.0.0.0")]
-        [DataRow("0.0.0.0/-1", "0.0.0.0,255.255.255.255")]
-        [DataRow("0.0.0.0/0", "0.0.0.0,255.255.255.255")]
-        [DataRow("0.0.0.0/1", "0.0.0.0,127.255.255.255")]
-        [DataRow("0.0.0.0/2", "0.0.0.0,63.255.255.255")]
-        public void CidrRangeArrayTest(string cidr, string expect)
+        [DataRow(null)]
+        [DataRow("11,22,abc")]
+        public void CloneTest(string orgStr)
         {
-            var c = Lib.Utils.Cidr2RangeArray(cidr);
-            var a = Lib.Utils.Long2Ip(c[0]);
-            var b = Lib.Utils.Long2Ip(c[1]);
-            Assert.AreEqual(expect, a + "," + b);
+            var org = orgStr?.Split(',').ToList();
+            var clone = Lib.Utils.Clone<List<string>>(org);
+            var sClone = Lib.Utils.SerializeObject(clone);
+            var sOrg = Lib.Utils.SerializeObject(org);
+            Assert.AreEqual(sOrg, sClone);
         }
 
-        [DataTestMethod]
-        [DataRow((1L << 32) - 1, "255.255.255.255")]
-        [DataRow(1, "0.0.0.1")]
-        [DataRow(0, "0.0.0.0")]
-        [DataRow(-1, "0.0.0.0")]
-        [DataRow(1L << 32, "0.0.0.0")]
-        [DataRow(255 + 123 * 256 + 12 * 256 * 256 + 192L * 256 * 256 * 256, "192.12.123.255")]
-        public void Long2IpTest(long number, string expect)
-        {
-            var ip = Lib.Utils.Long2Ip(number);
-            Assert.AreEqual(expect, ip);
-        }
 
         [DataTestMethod]
-        [DataRow(1, 1, 3, 3, Model.Data.Enum.Overlaps.None)]
-        [DataRow(1, 3, 2, 3, Model.Data.Enum.Overlaps.Right)]
-        [DataRow(1, 3, 0, 2, Model.Data.Enum.Overlaps.Left)]
-        [DataRow(-1, 1, 2, 10, Model.Data.Enum.Overlaps.None)]
-        [DataRow(3, 4, -1, 1, Model.Data.Enum.Overlaps.None)]
-        [DataRow(1, 1, 1, 1, Model.Data.Enum.Overlaps.All)]
-        [DataRow(-10, -1, -5, -3, Model.Data.Enum.Overlaps.Middle)]
-        [DataRow(1, 4, 3, 3, Model.Data.Enum.Overlaps.Middle)]
-        [DataRow(1, 2, 3, 4, Model.Data.Enum.Overlaps.None)]
-        public void OverlapsTest(long aStart, long aEnd, long bStart, long bEnd, Model.Data.Enum.Overlaps expect)
+        [DataRow("", false)]
+        [DataRow(null, false)]
+        [DataRow("VeryAwesomePlugin.dll", false)]
+#if DEBUG
+        [DataRow("ProxySetter.dll", true)]
+#endif
+        public void IsTrustedPluginTest(string source, bool expect)
         {
-            var a = new long[] { aStart, aEnd };
-            var b = new long[] { bStart, bEnd };
-            var result = Lib.Utils.Overlaps(a, b);
+            var result = Lib.Utils.IsTrustedPlugin(source);
             Assert.AreEqual(expect, result);
+        }
+
+        [DataTestMethod]
+        [DataRow("", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")]
+        [DataRow(null, "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")]
+        [DataRow("1234", "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4")]
+        public void Sha256Test(string source, string expect)
+        {
+            var sha = Lib.Utils.SHA256(source);
+            Assert.AreEqual(expect, sha);
         }
 
         [DataTestMethod]
@@ -66,114 +57,6 @@ namespace V2RayGCon.Test
         public void AreEqualTest(double a, double b, bool expect)
         {
             Assert.AreEqual(expect, Lib.Utils.AreEqual(a, b));
-        }
-
-        [DataTestMethod]
-        [DataRow(null, null)]
-        [DataRow(
-            "port=4321&ip=8.7.6.5&proto=http&type=blacklist",
-            "false,false,8.7.6.5,4321,false")]
-        [DataRow(
-            "port=5678&ip=1233.2.3.4&proto=socks&type=whitelist",
-            null)]
-        [DataRow(
-            "port=-5678&ip=1.2.3.4&proto=socks&type=whitelist",
-            null)]
-        [DataRow(
-            "port=5678&ip=1.2.3.4&proto=socks&type=whitelist&debug=true",
-            "true,true,1.2.3.4,5678,true")]
-
-        // url = "type,proto,ip,port,debug"
-        public void GetProxyParamsFromUrlTest(string url, string expect)
-        {
-            var proxyParams = Lib.Utils.GetProxyParamsFromUrl(
-                url == null ? null : (
-                "http://localhost:3000/pac/?&"
-                + url
-                + "&key="
-                + Lib.Utils.RandomHex(8)));
-
-            if (expect == null)
-            {
-                if (proxyParams == null)
-                {
-                    return;
-                }
-                Assert.Fail();
-                return;
-            }
-
-            var expParts = expect.Split(',');
-
-            if (
-                proxyParams.isWhiteList.ToString().ToLower() != expParts[0]
-                || proxyParams.isSocks.ToString().ToLower() != expParts[1]
-                || proxyParams.ip != expParts[2]
-                || proxyParams.port.ToString() != expParts[3]
-                || proxyParams.isDebug.ToString().ToLower() != expParts[4])
-            {
-                Assert.Fail();
-            }
-        }
-
-        [DataTestMethod]
-        [DataRow("11,22 2,5 3,4 7,8 1,2 6,6", "1,8 11,22")]
-        [DataRow("11,22 2,5 3,4 7,8 1,2", "1,5 7,8 11,22")]
-        [DataRow("1,2 3,4 1,1 1,2", "1,4")]
-        public void CompactRangeArrayListTest(string org, string expect)
-        {
-            long[] rangeParser(string rangeArray)
-            {
-                var v = rangeArray.Split(',');
-                return new long[] {
-                    (long)Lib.Utils.Str2Int(v[0]),
-                    (long)Lib.Utils.Str2Int(v[1]),
-                };
-            }
-
-            List<long[]> listParser(string listString)
-            {
-                var r = new List<long[]>();
-                foreach (var item in listString.Split(' '))
-                {
-                    r.Add(rangeParser(item));
-                }
-                return r;
-            }
-
-            var o = listParser(org);
-            var e = listParser(expect);
-            var result = Lib.Utils.CompactCidrList(ref o);
-
-            for (int i = 0; i < result.Count; i++)
-            {
-                if (result[i][0] != e[i][0] || result[i][1] != e[i][1])
-                {
-                    Assert.Fail();
-                }
-            }
-        }
-
-        [DataTestMethod]
-        [DataRow("172.316.254.1", 2906455553)] // becareful not a valid ip
-        [DataRow("0.254.255.0", 16711424)]
-        [DataRow("127.0.0.1", 2130706433)]
-        [DataRow("0.0.0.0", 0)]
-        public void IP2Int32Test(string address, long expect)
-        {
-            Assert.AreEqual(expect, Lib.Utils.IP2Long(address));
-        }
-
-        [DataTestMethod]
-        [DataRow("172.316.254.1", false)]
-        [DataRow("0.254.255.0", true)]
-        [DataRow("192.168.1.15_1", false)]
-        [DataRow("127.0.0.1", true)]
-        [DataRow("0.0.0.", false)]
-        [DataRow("0.0.0.0", true)]
-        public void IsIPTest(string address, bool expect)
-        {
-            Assert.AreEqual(expect, Lib.Utils.IsIP(address));
         }
 
         [DataTestMethod]

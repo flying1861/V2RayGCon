@@ -478,7 +478,6 @@ namespace V2RayGCon.Views.UserControls
             chkSelected.Checked = !chkSelected.Checked;
         }
 
-
         private void startToolStripMenuItem_Click(object sender, EventArgs e)
         {
             RestartServer();

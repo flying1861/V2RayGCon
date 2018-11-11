@@ -5,37 +5,46 @@ namespace V2RayGCon.Controller.OptionComponent
     class TabSetting : OptionComponentController
     {
         Service.Setting setting;
+        Service.Servers servers;
 
         ComboBox cboxLanguage = null, cboxPageSize = null;
-        CheckBox chkServAutoTrack = null, chkPortableMode = null;
+        CheckBox chkServAutoTrack = null,
+            chkPortableMode = null,
+            chkSetUseV4 = null;
 
         public TabSetting(
             ComboBox cboxLanguage,
             ComboBox cboxPageSize,
             CheckBox chkServAutoTrack,
-            CheckBox chkPortableMode)
+            CheckBox chkPortableMode,
+            CheckBox chkSetUseV4)
         {
             this.setting = Service.Setting.Instance;
+            this.servers = Service.Servers.Instance;
 
             // Do not put these lines of code into InitElement.
             this.cboxLanguage = cboxLanguage;
             this.cboxPageSize = cboxPageSize;
             this.chkServAutoTrack = chkServAutoTrack;
             this.chkPortableMode = chkPortableMode;
+            this.chkSetUseV4 = chkSetUseV4;
 
             InitElement(
                 cboxLanguage,
                 cboxPageSize,
                 chkServAutoTrack,
-                chkPortableMode);
+                chkPortableMode,
+                chkSetUseV4);
         }
 
         private void InitElement(
             ComboBox cboxLanguage,
             ComboBox cboxPageSize,
             CheckBox chkServAutoTrack,
-            CheckBox chkPortableMode)
+            CheckBox chkPortableMode,
+            CheckBox chkSetUseV4)
         {
+            chkSetUseV4.Checked = setting.isUseV4;
             chkPortableMode.Checked = setting.isPortable;
             cboxLanguage.SelectedIndex = (int)setting.culture;
             cboxPageSize.Text = setting.serverPanelPageSize.ToString();
@@ -58,7 +67,6 @@ namespace V2RayGCon.Controller.OptionComponent
                 Service.Servers.Instance.InvokeEventOnRequireFlyPanelUpdate();
             }
 
-
             var index = cboxLanguage.SelectedIndex;
             if (IsIndexValide(index) && ((int)setting.culture != index))
             {
@@ -67,24 +75,28 @@ namespace V2RayGCon.Controller.OptionComponent
                     + "Please restart this application.");
             }
 
+            var keepTracking = chkServAutoTrack.Checked;
             var trackerSetting = setting.GetServerTrackerSetting();
-            trackerSetting.isTrackerOn = chkServAutoTrack.Checked;
-            setting.SaveServerTrackerSetting(trackerSetting);
-            setting.isServerTrackerOn = trackerSetting.isTrackerOn;
-            setting.isPortable = chkPortableMode.Checked;
+            if (trackerSetting.isTrackerOn != keepTracking)
+            {
+                trackerSetting.isTrackerOn = keepTracking;
+                setting.SaveServerTrackerSetting(trackerSetting);
+                setting.isServerTrackerOn = keepTracking;
+                servers.UpdateTrackerSettingNow();
+            }
 
-            setting.SaveUserSettingsWorker();
+            setting.isPortable = chkPortableMode.Checked;
+            setting.isUseV4 = chkSetUseV4.Checked;
+
+            setting.SaveUserSettingsNow();
             return true;
         }
 
         public override bool IsOptionsChanged()
         {
-            if (setting.isPortable != chkPortableMode.Checked)
-            {
-                return true;
-            }
-
-            if (Lib.Utils.Str2Int(cboxPageSize.Text) != setting.serverPanelPageSize)
+            if (setting.isUseV4 != chkSetUseV4.Checked
+                || setting.isPortable != chkPortableMode.Checked
+                || Lib.Utils.Str2Int(cboxPageSize.Text) != setting.serverPanelPageSize)
             {
                 return true;
             }

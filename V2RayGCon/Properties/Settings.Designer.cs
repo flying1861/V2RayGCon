@@ -178,5 +178,41 @@ namespace V2RayGCon.Properties {
                 this["Portable"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UseV4Format {
+            get {
+                return ((bool)(this["UseV4Format"]));
+            }
+            set {
+                this["UseV4Format"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PluginInfoItems {
+            get {
+                return ((string)(this["PluginInfoItems"]));
+            }
+            set {
+                this["PluginInfoItems"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string UserSettings {
+            get {
+                return ((string)(this["UserSettings"]));
+            }
+            set {
+                this["UserSettings"] = value;
+            }
+        }
     }
 }

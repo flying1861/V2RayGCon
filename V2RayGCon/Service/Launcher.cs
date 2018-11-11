@@ -12,7 +12,7 @@ namespace V2RayGCon.Service
         Setting setting;
         Servers servers;
         Notifier notifier;
-
+        PluginsServer pluginsServ;
         bool isCleanupDone = false;
 
         Launcher()
@@ -23,6 +23,7 @@ namespace V2RayGCon.Service
             setting = Setting.Instance;
             servers = Servers.Instance;
             notifier = Notifier.Instance;
+            pluginsServ = PluginsServer.Instance;
 
             SetCulture(setting.culture);
 
@@ -30,6 +31,8 @@ namespace V2RayGCon.Service
             cache.Run(setting);
             servers.Run(setting, cache);
             notifier.Run(setting, servers);
+
+            pluginsServ.Run(setting, servers, notifier);
 
             Application.ApplicationExit +=
                 (s, a) => OnApplicationExitHandler(false);
@@ -58,10 +61,10 @@ namespace V2RayGCon.Service
 
                 setting.isShutdown = isShutdown;
 
+                pluginsServ.Cleanup();
                 notifier.Cleanup();
                 servers.Cleanup();
                 setting.Cleanup();
-
                 isCleanupDone = true;
             }
         }
@@ -99,13 +102,13 @@ namespace V2RayGCon.Service
 #if DEBUG
         void This_Function_Is_Used_For_Debugging()
         {
-            notifier.InjectDebugMenuItem(new ToolStripMenuItem(
-                "Debug",
-                null,
-                (s, a) =>
-                {
-                    servers.DbgFastRestartTest(100);
-                }));
+            //notifier.InjectDebugMenuItem(new ToolStripMenuItem(
+            //    "Debug",
+            //    null,
+            //    (s, a) =>
+            //    {
+            //        servers.DbgFastRestartTest(100);
+            //    }));
 
             // new Views.WinForms.FormConfiger(@"{}");
             // new Views.WinForms.FormConfigTester();
@@ -120,7 +123,7 @@ namespace V2RayGCon.Service
         #endregion
 
         #region public method
-        public void run()
+        public void Run()
         {
             Lib.Utils.SupportProtocolTLS12();
 

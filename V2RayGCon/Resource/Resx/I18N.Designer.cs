@@ -713,6 +713,15 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
+        ///   查找类似 Find no plugin. 的本地化字符串。
+        /// </summary>
+        internal static string FindNoPlugin {
+            get {
+                return ResourceManager.GetString("FindNoPlugin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Generate QRCode 的本地化字符串。
         /// </summary>
         internal static string GenQRCode {
@@ -790,15 +799,6 @@ namespace V2RayGCon.Resource.Resx {
         internal static string GlobalProxy {
             get {
                 return ResourceManager.GetString("GlobalProxy", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Global proxy require http server! 的本地化字符串。
-        /// </summary>
-        internal static string GlobalProxyRequireHttpServer {
-            get {
-                return ResourceManager.GetString("GlobalProxyRequireHttpServer", resourceCulture);
             }
         }
         
@@ -975,15 +975,6 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似 No server capable of system proxy. 的本地化字符串。
-        /// </summary>
-        internal static string NoServerCapableOfSysProxy {
-            get {
-                return ResourceManager.GetString("NoServerCapableOfSysProxy", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 No subscription links available. 的本地化字符串。
         /// </summary>
         internal static string NoSubsUrlAvailable {
@@ -1075,20 +1066,20 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似 PAC proxy require socks or http server. 的本地化字符串。
-        /// </summary>
-        internal static string PacProxyRequireSocksOrHttpServer {
-            get {
-                return ResourceManager.GetString("PacProxyRequireSocksOrHttpServer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 Can not parse json! Please check current config. 的本地化字符串。
         /// </summary>
         internal static string PleaseCheckConfig {
             get {
                 return ResourceManager.GetString("PleaseCheckConfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Plugins 的本地化字符串。
+        /// </summary>
+        internal static string Plugins {
+            get {
+                return ResourceManager.GetString("Plugins", resourceCulture);
             }
         }
         
@@ -1220,15 +1211,6 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似 Set as system proxy 的本地化字符串。
-        /// </summary>
-        internal static string SetAsSysProxy {
-            get {
-                return ResourceManager.GetString("SetAsSysProxy", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 Set proxy mode 的本地化字符串。
         /// </summary>
         internal static string SetProxyMode {
@@ -1280,16 +1262,6 @@ namespace V2RayGCon.Resource.Resx {
         internal static string Start {
             get {
                 return ResourceManager.GetString("Start", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Start PAC server fail. 
-        ///Please check port setting in form option. 的本地化字符串。
-        /// </summary>
-        internal static string StartPacServFail {
-            get {
-                return ResourceManager.GetString("StartPacServFail", resourceCulture);
             }
         }
         
@@ -1468,15 +1440,6 @@ namespace V2RayGCon.Resource.Resx {
         internal static string V2RayLink {
             get {
                 return ResourceManager.GetString("V2RayLink", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Visit PAC debugger webpage? 的本地化字符串。
-        /// </summary>
-        internal static string VisitPacDebugger {
-            get {
-                return ResourceManager.GetString("VisitPacDebugger", resourceCulture);
             }
         }
         

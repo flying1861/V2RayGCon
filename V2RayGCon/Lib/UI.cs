@@ -11,7 +11,7 @@ using V2RayGCon.Resource.Resx;
 
 namespace V2RayGCon.Lib
 {
-    public class UI
+    public static class UI
     {
         #region private method
         static double GetScalingFactorFromGraphic(Graphics graphic, int step)

@@ -61,7 +61,7 @@ namespace V2RayGCon
             if (mutex.WaitOne(TimeSpan.Zero, true))
             {
                 var app = Service.Launcher.Instance;
-                app.run();
+                app.Run();
                 Application.Run();
                 mutex.ReleaseMutex();
             }

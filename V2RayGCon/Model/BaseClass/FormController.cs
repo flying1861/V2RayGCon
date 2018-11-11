@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace V2RayGCon.Model.BaseClass
 {
-    class FormController
+    public class FormController
     {
         Dictionary<Type, IFormComponentController> components;
 

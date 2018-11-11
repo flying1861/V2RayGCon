@@ -62,7 +62,6 @@ namespace V2RayGCon.Controller
             var data = new Dictionary<string, string> {
                     { "import", JsonConvert.SerializeObject(setting.GetGlobalImportItems())},
                     { "subscription",JsonConvert.SerializeObject(setting.GetSubscriptionItems()) },
-                    { "pacserv",JsonConvert.SerializeObject(setting.GetPacServerSettings() ) },
                     { "servers" ,serverString},
                 };
 

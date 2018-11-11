@@ -459,9 +459,6 @@ https://github.com/v2ray/v2ray-core</value>
   <data name="NotSet" xml:space="preserve">
     <value>未设置</value>
   </data>
-  <data name="SetAsSysProxy" xml:space="preserve">
-    <value>设为系统代理</value>
-  </data>
   <data name="SysProxyRequireHTTPServer" xml:space="preserve">
     <value>只有HTTP服务器才能设为系统代理</value>
   </data>
@@ -571,9 +568,6 @@ https://github.com/v2ray/v2ray-core</value>
   <data name="StatusBarServerCountTpl" xml:space="preserve">
     <value>共{0}/{1}个服务器</value>
   </data>
-  <data name="StartPacServFail" xml:space="preserve">
-    <value>启动PAC服务器失败，请检查选项中的端口设置</value>
-  </data>
   <data name="SysProxyRequireHttpOrSocksMode" xml:space="preserve">
     <value>请先把模式设为HTTP或SOCKS</value>
   </data>
@@ -585,18 +579,6 @@ https://github.com/v2ray/v2ray-core</value>
   </data>
   <data name="GetInboundInfoFail" xml:space="preserve">
     <value>获取Inbound信息失败!</value>
-  </data>
-  <data name="GlobalProxyRequireHttpServer" xml:space="preserve">
-    <value>HTTP服务器才可以设置为全局代理</value>
-  </data>
-  <data name="PacProxyRequireSocksOrHttpServer" xml:space="preserve">
-    <value>SOCKS或HTTP服务器才可以设置为PAC代理</value>
-  </data>
-  <data name="VisitPacDebugger" xml:space="preserve">
-    <value>打开PAC调试器页面？</value>
-  </data>
-  <data name="NoServerCapableOfSysProxy" xml:space="preserve">
-    <value>没有可用作系统代理的服务器。</value>
   </data>
   <data name="SetAnyServerAsPacServerFirst" xml:space="preserve">
     <value>请先将任意服务器设为PAC代理。</value>
@@ -622,5 +604,11 @@ https://github.com/v2ray/v2ray-core</value>
   </data>
   <data name="PacProxy" xml:space="preserve">
     <value>PAC代理</value>
+  </data>
+  <data name="Plugins" xml:space="preserve">
+    <value>插件</value>
+  </data>
+  <data name="FindNoPlugin" xml:space="preserve">
+    <value>没找到任何插件。</value>
   </data>
 </root>

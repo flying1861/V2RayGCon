@@ -468,9 +468,6 @@ Are you sure want to continue?</value>
   <data name="NotSet" xml:space="preserve">
     <value>not set</value>
   </data>
-  <data name="SetAsSysProxy" xml:space="preserve">
-    <value>Set as system proxy</value>
-  </data>
   <data name="SysProxyRequireHTTPServer" xml:space="preserve">
     <value>System proxy must be a HTTP server.</value>
   </data>
@@ -583,10 +580,6 @@ Otherwise operations involving the network may fail.</value>
   <data name="StatusBarServerCountTpl" xml:space="preserve">
     <value>Total {0} of {1} server(s).</value>
   </data>
-  <data name="StartPacServFail" xml:space="preserve">
-    <value>Start PAC server fail. 
-Please check port setting in form option.</value>
-  </data>
   <data name="SysProxyRequireHttpOrSocksMode" xml:space="preserve">
     <value>Set mode to HTTP or SOCKS first, please!</value>
   </data>
@@ -599,18 +592,6 @@ Please take a look at log.</value>
   </data>
   <data name="GetInboundInfoFail" xml:space="preserve">
     <value>Get inbound information fail!</value>
-  </data>
-  <data name="GlobalProxyRequireHttpServer" xml:space="preserve">
-    <value>Global proxy require http server!</value>
-  </data>
-  <data name="PacProxyRequireSocksOrHttpServer" xml:space="preserve">
-    <value>PAC proxy require socks or http server.</value>
-  </data>
-  <data name="VisitPacDebugger" xml:space="preserve">
-    <value>Visit PAC debugger webpage?</value>
-  </data>
-  <data name="NoServerCapableOfSysProxy" xml:space="preserve">
-    <value>No server capable of system proxy.</value>
   </data>
   <data name="SetAnyServerAsPacServerFirst" xml:space="preserve">
     <value>Please set any server as PAC proxy first.</value>
@@ -637,5 +618,11 @@ Please delete {0} in app folder.</value>
   </data>
   <data name="PacProxy" xml:space="preserve">
     <value>PAC proxy</value>
+  </data>
+  <data name="Plugins" xml:space="preserve">
+    <value>Plugins</value>
+  </data>
+  <data name="FindNoPlugin" xml:space="preserve">
+    <value>Find no plugin.</value>
   </data>
 </root>

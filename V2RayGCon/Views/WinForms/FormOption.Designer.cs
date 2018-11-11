@@ -40,6 +40,7 @@
             this.flySubsUrlContainer = new System.Windows.Forms.FlowLayoutPanel();
             this.tabPageSetting = new System.Windows.Forms.TabPage();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.chkSetUseV4 = new System.Windows.Forms.CheckBox();
             this.chkSetSysPortable = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.chkSetServAutotrack = new System.Windows.Forms.CheckBox();
@@ -49,6 +50,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.cboxSettingLanguage = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.tabPagePlugins = new System.Windows.Forms.TabPage();
+            this.btnPluginsRefresh = new System.Windows.Forms.Button();
+            this.flyPluginsItemsContainer = new System.Windows.Forms.FlowLayoutPanel();
             this.btnBakBackup = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.btnOptionSave = new System.Windows.Forms.Button();
@@ -61,6 +65,7 @@
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.tabPagePlugins.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -69,6 +74,7 @@
             this.tabControl1.Controls.Add(this.tabPageImport);
             this.tabControl1.Controls.Add(this.tabPageSubscribe);
             this.tabControl1.Controls.Add(this.tabPageSetting);
+            this.tabControl1.Controls.Add(this.tabPagePlugins);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             // 
@@ -135,10 +141,18 @@
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.chkSetUseV4);
             this.groupBox6.Controls.Add(this.chkSetSysPortable);
             resources.ApplyResources(this.groupBox6, "groupBox6");
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.TabStop = false;
+            // 
+            // chkSetUseV4
+            // 
+            resources.ApplyResources(this.chkSetUseV4, "chkSetUseV4");
+            this.chkSetUseV4.Name = "chkSetUseV4";
+            this.toolTip1.SetToolTip(this.chkSetUseV4, resources.GetString("chkSetUseV4.ToolTip"));
+            this.chkSetUseV4.UseVisualStyleBackColor = true;
             // 
             // chkSetSysPortable
             // 
@@ -211,6 +225,27 @@
             resources.ApplyResources(this.label1, "label1");
             this.label1.Name = "label1";
             // 
+            // tabPagePlugins
+            // 
+            this.tabPagePlugins.Controls.Add(this.btnPluginsRefresh);
+            this.tabPagePlugins.Controls.Add(this.flyPluginsItemsContainer);
+            resources.ApplyResources(this.tabPagePlugins, "tabPagePlugins");
+            this.tabPagePlugins.Name = "tabPagePlugins";
+            this.tabPagePlugins.UseVisualStyleBackColor = true;
+            // 
+            // btnPluginsRefresh
+            // 
+            resources.ApplyResources(this.btnPluginsRefresh, "btnPluginsRefresh");
+            this.btnPluginsRefresh.Name = "btnPluginsRefresh";
+            this.toolTip1.SetToolTip(this.btnPluginsRefresh, resources.GetString("btnPluginsRefresh.ToolTip"));
+            this.btnPluginsRefresh.UseVisualStyleBackColor = true;
+            // 
+            // flyPluginsItemsContainer
+            // 
+            resources.ApplyResources(this.flyPluginsItemsContainer, "flyPluginsItemsContainer");
+            this.flyPluginsItemsContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.flyPluginsItemsContainer.Name = "flyPluginsItemsContainer";
+            // 
             // btnBakBackup
             // 
             resources.ApplyResources(this.btnBakBackup, "btnBakBackup");
@@ -263,6 +298,7 @@
             this.groupBox5.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.tabPagePlugins.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -293,5 +329,9 @@
         private System.Windows.Forms.CheckBox chkSetServAutotrack;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.CheckBox chkSetSysPortable;
+        private System.Windows.Forms.CheckBox chkSetUseV4;
+        private System.Windows.Forms.TabPage tabPagePlugins;
+        private System.Windows.Forms.Button btnPluginsRefresh;
+        private System.Windows.Forms.FlowLayoutPanel flyPluginsItemsContainer;
     }
 }
