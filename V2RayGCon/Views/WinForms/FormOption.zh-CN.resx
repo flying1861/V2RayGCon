@@ -117,20 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="tabPageImport.Text" xml:space="preserve">
+    <value>全局import</value>
+  </data>
+  <data name="tabPageSubscribe.Text" xml:space="preserve">
+    <value>订阅</value>
+  </data>
+  <data name="tabPageSetting.Text" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="tabPagePlugins.Text" xml:space="preserve">
+    <value>插件</value>
+  </data>
   <data name="btnImportAdd.Text" xml:space="preserve">
     <value>添加</value>
   </data>
   <data name="btnImportAdd.ToolTip" xml:space="preserve">
     <value>添加import URL</value>
-  </data>
-  <data name="flyImportPanel.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="tabPageImport.Text" xml:space="preserve">
-    <value>全局import</value>
-  </data>
-  <data name="tabPageImport.ToolTip" xml:space="preserve">
-    <value />
   </data>
   <data name="btnUpdateViaSubscription.Text" xml:space="preserve">
     <value>更新</value>
@@ -144,18 +147,8 @@
   <data name="btnAddSubsUrl.ToolTip" xml:space="preserve">
     <value>添加订阅url</value>
   </data>
-  <data name="flySubsUrlContainer.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="tabPageSubscribe.Text" xml:space="preserve">
-    <value>订阅</value>
-  </data>
-  <data name="tabPageSubscribe.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="chkSetUseV4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 22</value>
+  <data name="groupBox6.Text" xml:space="preserve">
+    <value>系统</value>
   </data>
   <data name="chkSetUseV4.Text" xml:space="preserve">
     <value>优先使用v4格式</value>
@@ -163,44 +156,23 @@
   <data name="chkSetUseV4.ToolTip" xml:space="preserve">
     <value>导入/编辑时使用v4的in(out)bounds</value>
   </data>
-  <data name="chkSetSysPortable.Size" type="System.Drawing.Size, System.Drawing">
-    <value>106, 22</value>
-  </data>
   <data name="chkSetSysPortable.Text" xml:space="preserve">
     <value>便携模式</value>
   </data>
   <data name="chkSetSysPortable.ToolTip" xml:space="preserve">
     <value>将配置信息保存到软件运行目录内</value>
   </data>
-  <data name="groupBox6.Text" xml:space="preserve">
-    <value>系统</value>
-  </data>
-  <data name="groupBox6.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="chkSetServAutotrack.Size" type="System.Drawing.Size, System.Drawing">
-    <value>106, 22</value>
+  <data name="groupBox5.Text" xml:space="preserve">
+    <value>服务器</value>
   </data>
   <data name="chkSetServAutotrack.Text" xml:space="preserve">
     <value>自动追踪</value>
   </data>
   <data name="chkSetServAutotrack.ToolTip" xml:space="preserve">
-    <value>切换服务器时自动将系统代理指向新服务器。保持上次退出时的服务器运行状态。</value>
+    <value>保持上次退出时的服务器运行状态。</value>
   </data>
-  <data name="groupBox5.Text" xml:space="preserve">
-    <value>服务器</value>
-  </data>
-  <data name="groupBox5.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="cboxSettingPageSize.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="label3.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 18</value>
+  <data name="groupBox1.Text" xml:space="preserve">
+    <value>界面</value>
   </data>
   <data name="label2.Text" xml:space="preserve">
     <value>分页大小</value>
@@ -208,107 +180,11 @@
   <data name="label2.ToolTip" xml:space="preserve">
     <value>主窗口服务器列表每页显示服务器数</value>
   </data>
-  <data name="cboxSettingLanguage.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="label1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="groupBox1.Text" xml:space="preserve">
-    <value>界面</value>
-  </data>
-  <data name="groupBox1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="tabPageSetting.Text" xml:space="preserve">
-    <value>设置</value>
-  </data>
-  <data name="tabPageSetting.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rtboxPacServWhiteList.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="groupBox3.Text" xml:space="preserve">
-    <value>白名单</value>
-  </data>
-  <data name="groupBox3.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rtboxPacServBlackList.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="groupBox4.Text" xml:space="preserve">
-    <value>黑名单</value>
-  </data>
-  <data name="groupBox4.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="tableLayoutPanel1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="panel1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="btnPacBrowseFile.Text" xml:space="preserve">
-    <value>浏览...</value>
-  </data>
-  <data name="chkPacCustomFile.Location" type="System.Drawing.Point, System.Drawing">
-    <value>524, 67</value>
-  </data>
-  <data name="chkPacCustomFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>151, 22</value>
-  </data>
-  <data name="chkPacCustomFile.Text" xml:space="preserve">
-    <value>启用自定义PAC</value>
-  </data>
-  <data name="chkPacServIsAutorun.Size" type="System.Drawing.Size, System.Drawing">
-    <value>88, 22</value>
-  </data>
-  <data name="chkPacServIsAutorun.Text" xml:space="preserve">
-    <value>自启动</value>
-  </data>
-  <data name="chkPacServIsAutorun.ToolTip" xml:space="preserve">
-    <value>软件启动时开启PAC服务器</value>
-  </data>
-  <data name="tboxPacServPort.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="label5.Text" xml:space="preserve">
-    <value>端口</value>
-  </data>
-  <data name="label5.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="groupBox2.Text" xml:space="preserve">
-    <value>基本</value>
-  </data>
-  <data name="groupBox2.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="tabPagePACServ.Text" xml:space="preserve">
-    <value>PAC服务器</value>
-  </data>
-  <data name="tabPagePACServ.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="btnPluginsRefresh.Text" xml:space="preserve">
     <value>刷新</value>
   </data>
   <data name="btnPluginsRefresh.ToolTip" xml:space="preserve">
     <value>搜索plugins目录中的插件</value>
-  </data>
-  <data name="flyPluginsItemsContainer.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="tabPagePlugins.Text" xml:space="preserve">
-    <value>插件</value>
-  </data>
-  <data name="tabPagePlugins.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="tabControl1.ToolTip" xml:space="preserve">
-    <value />
   </data>
   <data name="btnBakBackup.Text" xml:space="preserve">
     <value>备份</value>
@@ -331,9 +207,7 @@
   <data name="btnOptionExit.Text" xml:space="preserve">
     <value>退出</value>
   </data>
-  <data name="btnOptionExit.ToolTip" xml:space="preserve">
-    <value />
-  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAYAAAAAAAEAIAAoIAQAZgAAABAQAAABACAAaAQAAI4gBAAwMAAAAQAgAKglAAD2JAQAICAAAAEA
@@ -6508,8 +6382,5 @@
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>选项</value>
-  </data>
-  <data name="$this.ToolTip" xml:space="preserve">
-    <value />
   </data>
 </root>

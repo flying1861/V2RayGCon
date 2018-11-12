@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "V2RayGCon", "V2RayGCon\V2Ra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "V2RayGConTest", "V2RayGCon.Test\V2RayGConTest.csproj", "{AF050080-15FD-4196-9466-89113DED54DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VgcPlugin", "VgcPlugin\VgcPlugin.csproj", "{B3CF9873-AFBC-4703-8A3B-06D39FD761B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VgcApis", "VgcApis\VgcApis.csproj", "{B3CF9873-AFBC-4703-8A3B-06D39FD761B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

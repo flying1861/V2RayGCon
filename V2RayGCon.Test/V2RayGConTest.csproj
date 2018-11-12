@@ -71,12 +71,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\V2RayGCon\V2RayGCon.csproj">
-      <Project>{7b799000-e68f-450f-84af-5ec9a5eff384}</Project>
-      <Name>V2RayGCon</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Resource\Data\links.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -87,6 +81,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>TestConst.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\V2RayGCon\V2RayGCon.csproj">
+      <Project>{7b799000-e68f-450f-84af-5ec9a5eff384}</Project>
+      <Name>V2RayGCon</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

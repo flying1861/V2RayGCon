@@ -11,12 +11,14 @@ using V2RayGCon.Resource.Resx;
 
 namespace V2RayGCon.Service
 {
-    public class Servers : Model.BaseClass.SingletonService<Servers>
+    public class Servers :
+        Model.BaseClass.SingletonService<Servers>,
+        VgcApis.Models.IServersService
     {
         Setting setting = null;
         Cache cache = null;
 
-        public event EventHandler<Model.Data.BoolEvent>
+        public event EventHandler<VgcApis.Models.BoolEvent>
             OnServerStateChange;
 
         public event EventHandler
@@ -53,6 +55,15 @@ namespace V2RayGCon.Service
                 BindEventsTo(server);
             }
         }
+
+        #region interface for plugins
+        public ReadOnlyCollection<VgcApis.Models.ICoreCtrl> GetTrackableServerList()
+           => serverList
+               .Where(s => s.isServerOn && !s.isUntrack)
+               .Select(s => s as VgcApis.Models.ICoreCtrl)
+               .ToList()
+               .AsReadOnly();
+        #endregion
 
         #region property
         bool _isTesting;
@@ -178,7 +189,9 @@ namespace V2RayGCon.Service
             return trackerSetting;
         }
 
-        void InvokeOnServerStateChange(object sender, Model.Data.BoolEvent isServerStart)
+        void InvokeOnServerStateChange(
+            object sender,
+            VgcApis.Models.BoolEvent isServerStart)
         {
             try
             {
@@ -506,7 +519,7 @@ namespace V2RayGCon.Service
             catch { }
         }
 
-        void OnSendLogHandler(object sender, Model.Data.StrEvent arg)
+        void OnSendLogHandler(object sender, VgcApis.Models.StrEvent arg)
         {
             setting.SendLog(arg.Data);
         }
@@ -610,7 +623,7 @@ namespace V2RayGCon.Service
             lazyServerTrackerTimer.Start();
         }
 
-        void OnRequireKeepTrackHandler(object sender, Model.Data.BoolEvent isServerStart)
+        void OnRequireKeepTrackHandler(object sender, VgcApis.Models.BoolEvent isServerStart)
         {
             // for plugins
             InvokeOnServerStateChange(sender, isServerStart);
@@ -832,7 +845,7 @@ namespace V2RayGCon.Service
                 var config = cache.tpl.LoadPackage("main");
                 config["v2raygcon"]["description"] = string.Join(" ", serverNameList);
                 Lib.Utils.UnionJson(ref config, packages);
-                OnSendLogHandler(this, new Model.Data.StrEvent(I18N.PackageDone));
+                OnSendLogHandler(this, new VgcApis.Models.StrEvent(I18N.PackageDone));
                 AddServer(config.ToString(Formatting.None), "Package");
                 UpdateMarkList();
                 Lib.UI.ShowMessageBoxDoneAsync();
@@ -848,11 +861,11 @@ namespace V2RayGCon.Service
                     var vnext = GenVnextConfigPart(index, port, id);
                     Lib.Utils.UnionJson(ref packages, vnext);
                     serverNameList.Add(server.name);
-                    OnSendLogHandler(this, new Model.Data.StrEvent(I18N.PackageSuccess + ": " + server.name));
+                    OnSendLogHandler(this, new VgcApis.Models.StrEvent(I18N.PackageSuccess + ": " + server.name));
                 }
                 catch
                 {
-                    OnSendLogHandler(this, new Model.Data.StrEvent(I18N.PackageFail + ": " + server.name));
+                    OnSendLogHandler(this, new VgcApis.Models.StrEvent(I18N.PackageFail + ": " + server.name));
                 }
                 next();
             };

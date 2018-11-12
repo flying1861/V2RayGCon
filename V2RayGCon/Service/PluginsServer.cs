@@ -10,10 +10,10 @@ namespace V2RayGCon.Service
     {
         Setting setting;
         Notifier notifier;
-        Model.Plugin.ApiServ apis = new Model.Plugin.ApiServ();
+        Plugin.ApiServ apis = new Plugin.ApiServ();
 
-        Dictionary<string, VgcPlugin.IPlugin> plugins =
-            new Dictionary<string, VgcPlugin.IPlugin>();
+        Dictionary<string, VgcApis.IPlugin> plugins =
+            new Dictionary<string, VgcApis.IPlugin>();
 
         PluginsServer() { }
 
@@ -43,7 +43,6 @@ namespace V2RayGCon.Service
         public void Cleanup()
         {
             ClearPlugins();
-            apis.Cleanup();
         }
 
         public List<Model.Data.PluginInfoItem> GetterPluginDirInfo()
@@ -87,9 +86,9 @@ namespace V2RayGCon.Service
             StartPlugins(enabledList);
         }
 
-        public Dictionary<string, VgcPlugin.IPlugin> SearchForPlugins()
+        public Dictionary<string, VgcApis.IPlugin> SearchForPlugins()
         {
-            var pluginList = new Dictionary<string, VgcPlugin.IPlugin>();
+            var pluginList = new Dictionary<string, VgcApis.IPlugin>();
 
             var dllFileNames = SearchDllFiles();
             if (dllFileNames == null)
@@ -104,7 +103,7 @@ namespace V2RayGCon.Service
                     continue;
                 }
 
-                var plugin = Model.Plugin.Sandboxer.LoadTrustedPlugin(relativeFilePath);
+                var plugin = Plugin.Sandboxer.LoadTrustedPlugin(relativeFilePath);
                 if (plugin == null)
                 {
                     continue;
@@ -148,7 +147,7 @@ namespace V2RayGCon.Service
         void ClearPlugins()
         {
             CleanupPlugins(plugins.Keys.ToList());
-            plugins = new Dictionary<string, VgcPlugin.IPlugin>();
+            plugins = new Dictionary<string, VgcApis.IPlugin>();
         }
 
         List<string> GetCurEnabledPluginFileNames()
@@ -161,7 +160,7 @@ namespace V2RayGCon.Service
         }
 
         List<Model.Data.PluginInfoItem> GetPluginInfoFrom(
-            Dictionary<string, VgcPlugin.IPlugin> pluginList)
+            Dictionary<string, VgcApis.IPlugin> pluginList)
         {
             if (pluginList.Count <= 0)
             {

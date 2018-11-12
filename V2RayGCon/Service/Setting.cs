@@ -12,9 +12,12 @@ using V2RayGCon.Resource.Resx;
 
 namespace V2RayGCon.Service
 {
-    public class Setting : Model.BaseClass.SingletonService<Setting>
+    public class Setting :
+        Model.BaseClass.SingletonService<Setting>,
+        VgcApis.Models.ISettingService
+
     {
-        public event EventHandler<Model.Data.StrEvent> OnLog;
+        public event EventHandler<VgcApis.Models.StrEvent> OnLog;
         public event EventHandler OnRequireNotifyTextUpdate;
         Model.Data.UserSettings userSettings;
 
@@ -365,7 +368,7 @@ namespace V2RayGCon.Service
             logCache = log;
             try
             {
-                OnLog?.Invoke(this, new Model.Data.StrEvent(log));
+                OnLog?.Invoke(this, new VgcApis.Models.StrEvent(log));
             }
             catch { }
         }
@@ -654,7 +657,7 @@ namespace V2RayGCon.Service
         void DebugSendLog(string content)
         {
 #if DEBUG
-            SendLog(content);
+            SendLog($"(Debug) {content}");
 #endif
         }
         #endregion

@@ -49,7 +49,7 @@ namespace V2RayGCon.Views.WinForms
             setting.OnLog += LogReceiver;
         }
 
-        void LogReceiver(object sender, Model.Data.StrEvent e)
+        void LogReceiver(object sender, VgcApis.Models.StrEvent e)
         {
             Task.Factory.StartNew(() =>
             {

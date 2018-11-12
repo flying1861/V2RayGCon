@@ -146,10 +146,8 @@
     <Compile Include="Model\Data\PluginInfoItem.cs" />
     <Compile Include="Model\Data\ServerTracker.cs" />
     <Compile Include="Model\Data\UserSettings.cs" />
-    <Compile Include="Model\Plugin\Apis\ApiServersService.cs" />
-    <Compile Include="Model\Plugin\Apis\ApiSettingService.cs" />
-    <Compile Include="Model\Plugin\Apis\ApiUtils.cs" />
-    <Compile Include="Model\Plugin\Sandboxer.cs" />
+    <Compile Include="Plugin\Apis\ApiUtils.cs" />
+    <Compile Include="Plugin\Sandboxer.cs" />
     <Compile Include="Service\Core.cs" />
     <Compile Include="Model\BaseClass\ICacheComponent.cs" />
     <Compile Include="Model\BaseClass\FormComponentController.cs" />
@@ -157,7 +155,7 @@
     <Compile Include="Model\BaseClass\SingletonService.cs" />
     <Compile Include="Model\Data\ImportItem.cs" />
     <Compile Include="Service\Launcher.cs" />
-    <Compile Include="Model\Plugin\ApiServ.cs" />
+    <Compile Include="Plugin\ApiServ.cs" />
     <Compile Include="Service\PluginsServer.cs" />
     <Compile Include="Views\UserControls\ImportUI.cs">
       <SubType>UserControl</SubType>
@@ -197,7 +195,6 @@
     <Compile Include="Service\Caches\CoreCache.cs" />
     <Compile Include="Model\BaseClass\CacheComponent.cs" />
     <Compile Include="Service\Caches\HTML.cs" />
-    <Compile Include="Model\Data\DataEvent.cs" />
     <Compile Include="Model\Data\Enum.cs" />
     <Compile Include="Model\Data\Shadowsocks.cs" />
     <Compile Include="Model\Data\Table.cs" />
@@ -471,9 +468,9 @@
     <Folder Include="Resource\Icon\FormMainToolStrip\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\VgcPlugin\VgcPlugin.csproj">
+    <ProjectReference Include="..\VgcApis\VgcApis.csproj">
       <Project>{b3cf9873-afbc-4703-8a3b-06d39fd761b9}</Project>
-      <Name>VgcPlugin</Name>
+      <Name>VgcApis</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

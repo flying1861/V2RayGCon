@@ -34,7 +34,7 @@ namespace V2RayGCon.Views.WinForms
             serverItem.OnLog += OnLogHandler;
         }
 
-        private void OnLogHandler(object sender, Model.Data.StrEvent args)
+        private void OnLogHandler(object sender, VgcApis.Models.StrEvent args)
         {
             Task.Factory.StartNew(() =>
             {
