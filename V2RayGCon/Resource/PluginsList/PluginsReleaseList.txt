@@ -1,3 +1,3 @@
 ﻿{
-  "e049de5ab42650cf078d04e6d765d0fa2d205d8f9c3eaf98804a8dd1bd0e58ed":"ProxySetter v0.0.2 release 2018.11.12"
+  "aeaa6384e3b1b57dfb54d8861df9d4cecbde4af890b24b523384822a8c33fad2":"ProxySetter v0.0.2 release 2018.11.13"
 }

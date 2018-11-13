@@ -41,6 +41,9 @@ namespace V2RayGCon.Lib.Sys
         #region private method
         static void AppendLog(string prefix, string message)
         {
+#if !DEBUG
+            return;
+#endif
             lock (writeLogLocker)
             {
                 using (StreamWriter w = File.AppendText(StrConst.LogFileName))
