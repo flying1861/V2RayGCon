@@ -182,8 +182,8 @@ namespace V2RayGCon.Plugin
             }
             try
             {
-                AssemblyName an = AssemblyName.GetAssemblyName(fileName);
-                return Assembly.Load(an);
+                // https://stackoverflow.com/questions/15238714/net-local-assembly-load-failed-with-cas-policy
+                return Assembly.UnsafeLoadFrom(fileName);
             }
             catch { }
             return null;
