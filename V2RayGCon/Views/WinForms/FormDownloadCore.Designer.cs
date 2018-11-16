@@ -36,6 +36,7 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnCheckVersion = new System.Windows.Forms.Button();
+            this.chkUseProxy = new System.Windows.Forms.CheckBox();
             this.btnExit = new System.Windows.Forms.Button();
             this.pgBarDownload = new System.Windows.Forms.ProgressBar();
             this.label1 = new System.Windows.Forms.Label();
@@ -86,6 +87,13 @@
             this.btnCheckVersion.UseVisualStyleBackColor = true;
             this.btnCheckVersion.Click += new System.EventHandler(this.BtnCheckVersion_Click);
             // 
+            // chkUseProxy
+            // 
+            resources.ApplyResources(this.chkUseProxy, "chkUseProxy");
+            this.chkUseProxy.Name = "chkUseProxy";
+            this.toolTip1.SetToolTip(this.chkUseProxy, resources.GetString("chkUseProxy.ToolTip"));
+            this.chkUseProxy.UseVisualStyleBackColor = true;
+            // 
             // btnExit
             // 
             resources.ApplyResources(this.btnExit, "btnExit");
@@ -135,6 +143,7 @@
             // groupBox2
             // 
             resources.ApplyResources(this.groupBox2, "groupBox2");
+            this.groupBox2.Controls.Add(this.chkUseProxy);
             this.groupBox2.Controls.Add(this.btnExit);
             this.groupBox2.Controls.Add(this.btnDownload);
             this.groupBox2.Controls.Add(this.btnCancel);
@@ -182,5 +191,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button btnExit;
+        private System.Windows.Forms.CheckBox chkUseProxy;
     }
 }

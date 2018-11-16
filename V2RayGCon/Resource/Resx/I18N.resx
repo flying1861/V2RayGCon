@@ -625,4 +625,8 @@ Please delete {0} in app folder.</value>
   <data name="FindNoPlugin" xml:space="preserve">
     <value>Find no plugin.</value>
   </data>
+  <data name="NoQualifyProxyServer" xml:space="preserve">
+    <value>No qualify proxy server available!
+Switch to direct download.</value>
+  </data>
 </root>

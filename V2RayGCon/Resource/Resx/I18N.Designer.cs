@@ -975,6 +975,16 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
+        ///   查找类似 No qualify proxy server available!
+        ///Switch to direct download. 的本地化字符串。
+        /// </summary>
+        internal static string NoQualifyProxyServer {
+            get {
+                return ResourceManager.GetString("NoQualifyProxyServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 No subscription links available. 的本地化字符串。
         /// </summary>
         internal static string NoSubsUrlAvailable {

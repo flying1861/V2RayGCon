@@ -891,7 +891,30 @@ namespace V2RayGCon.Lib
                 socket.Bind(_defaultLoopbackEndpoint);
                 return ((IPEndPoint)socket.LocalEndPoint).Port;
             }
+        }
 
+        public static string FetchThroughProxy(string url, int proxyPort)
+        {
+            var html = string.Empty;
+
+            using (WebClient wc = new Lib.Nets.TimedWebClient
+            {
+                Encoding = System.Text.Encoding.UTF8,
+                Timeout = 30 * 1000,
+            })
+            {
+                wc.Proxy = new WebProxy("127.0.0.1", proxyPort);
+                /* 如果用抛出异常的写法
+                 * task中调用此函数时
+                 * 会弹出用户未处理异常警告
+                 */
+                try
+                {
+                    html = wc.DownloadString(url);
+                }
+                catch { }
+            }
+            return html;
         }
 
         public static string Fetch(string url, int timeout = -1)
@@ -936,11 +959,14 @@ namespace V2RayGCon.Lib
             return string.Empty;
         }
 
-        public static List<string> GetCoreVersions()
+        public static List<string> GetCoreVersions(int proxyPort)
         {
             List<string> versions = new List<string> { };
+            var url = StrConst.ReleasePageUrl;
 
-            string html = Fetch(StrConst.ReleasePageUrl);
+            string html = proxyPort > 0 ?
+                FetchThroughProxy(url, proxyPort) :
+                Fetch(url);
 
             if (string.IsNullOrEmpty(html))
             {
@@ -1142,14 +1168,23 @@ namespace V2RayGCon.Lib
             ip = "127.0.0.1";
             port = 1080;
 
-            string[] parts = address.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-            if (parts.Length != 2)
+            int index = address.LastIndexOf(':');
+            if (index < 0)
             {
                 return false;
             }
 
-            ip = parts[0];
-            port = Clamp(Str2Int(parts[1]), 0, 65536);
+            var ipStr = address.Substring(0, index);
+            var portStr = address.Substring(index + 1);
+            var portInt = Clamp(Str2Int(portStr), 0, 65536);
+
+            if(string.IsNullOrEmpty(ipStr) || portInt == 0)
+            {
+                return false;
+            }
+
+            ip = ipStr;
+            port = portInt;
             return true;
         }
 

@@ -645,6 +645,58 @@ namespace V2RayGCon.Service
         #endregion
 
         #region public method
+        /// <summary>
+        /// ref means config will change after the function is executed.
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        public void InjectSkipCnSiteSettingsIntoConfig(
+            ref JObject config,
+            bool useV4)
+        {
+            var c = JObject.Parse(@"{}");
+
+            var dict = new Dictionary<string, string> {
+                { "dns","dnsCFnGoogle" },
+                { "routing","routeCNIP" },
+            };
+
+            foreach (var item in dict)
+            {
+                var tpl = Lib.Utils.CreateJObject(item.Key);
+                var value = cache.tpl.LoadExample(item.Value);
+                tpl[item.Key] = value;
+
+                if (!Lib.Utils.Contains(config, tpl))
+                {
+                    c[item.Key] = value;
+                }
+            }
+
+            // put dns/routing settings in front of user settings
+            Lib.Utils.CombineConfig(ref config, c);
+
+            // put outbounds after user settings
+            var hasOutbounds = Lib.Utils.GetKey(config, "outbounds") != null;
+            var hasOutDtr = Lib.Utils.GetKey(config, "outboundDetour") != null;
+
+            var outboundTag = "outboundDetour";
+            if (!hasOutDtr && (hasOutbounds || useV4))
+            {
+                outboundTag = "outbounds";
+            }
+
+            var o = Lib.Utils.CreateJObject(
+                outboundTag,
+                cache.tpl.LoadExample("outDtrFreedom"));
+
+            if (!Lib.Utils.Contains(config, o))
+            {
+                Lib.Utils.CombineConfig(ref o, config);
+                config = o;
+            }
+        }
+
         public void UpdateTrackerSettingNow()
         {
             var fakeCtrl = new Controller.CoreServerCtrl

@@ -100,15 +100,22 @@ namespace V2RayGCon.Views.WinForms
 
         void BindToolStripButtonToMenuItem()
         {
-            void bind(ToolStripButton button, ToolStripMenuItem menu)
+            void bind(ToolStripButton button, ToolStripMenuItem menu, bool activate = true)
             {
-                button.Click += (s, a) =>
+                if (activate)
                 {
-                    menu.PerformClick();
+                    button.Click += (s, a) =>
+                    {
+                        menu.PerformClick();
 
-                    // Do not know why, form main will lost focus sometime.
-                    this.Activate();
-                };
+                        // Do not know why, form main will lost focus sometimes.
+                        this.Activate();
+                    };
+                }
+                else
+                {
+                    button.Click += (s, a) => menu.PerformClick();
+                }
             }
 
             bind(toolStripButtonSelectAllCurPage, selectAllCurPageToolStripMenuItem);
@@ -125,7 +132,7 @@ namespace V2RayGCon.Views.WinForms
             bind(toolStripButtonRunSpeedTest, toolStripMenuItemSpeedTestOnSelected);
             bind(toolStripButtonSortSelectedBySpeedTestResult, toolStripMenuItemSortBySpeedTest);
 
-            bind(toolStripButtonFormOption, toolMenuItemOptions);
+            bind(toolStripButtonFormOption, toolMenuItemOptions, false);
         }
 
         private Controller.FormMainCtrl InitFormMainCtrl()

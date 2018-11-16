@@ -299,7 +299,8 @@ namespace V2RayGCon.Views.WinForms
 
                 .Plug(new Controller.ConfigerComponet.Quick(
                     btnQConSkipCN,
-                    btnQConMTProto));
+                    btnQConMTProto,
+                    chkIsV4));
 
             configer.Prepare();
             return configer;

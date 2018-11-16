@@ -15,6 +15,8 @@ namespace V2RayGCon.Service
 
         string _packageName;
         string _version;
+
+        public int proxyPort { get; set; } = -1;
         WebClient client;
 
         Service.Setting setting;
@@ -29,7 +31,6 @@ namespace V2RayGCon.Service
         }
 
         #region public method
-
         public void SetArchitecture(bool win64 = false)
         {
             _packageName = win64 ? StrConst.PkgWin64 : StrConst.PkgWin32;
@@ -185,6 +186,11 @@ namespace V2RayGCon.Service
             }
 
             client = new WebClient();
+
+            if (proxyPort > 0)
+            {
+                client.Proxy = new WebProxy("127.0.0.1", proxyPort);
+            }
 
             client.DownloadProgressChanged += (s, a) =>
             {

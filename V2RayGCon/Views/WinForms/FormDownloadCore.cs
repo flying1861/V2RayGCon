@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
@@ -20,10 +21,12 @@ namespace V2RayGCon.Views.WinForms
 
         Service.Downloader downloader;
         Service.Setting setting;
+        Service.Servers servers;
 
         FormDownloadCore()
         {
             setting = Service.Setting.Instance;
+            servers = Service.Servers.Instance;
 
             InitializeComponent();
             InitUI();
@@ -47,6 +50,22 @@ namespace V2RayGCon.Views.WinForms
         }
 
         #region private method
+        int GetAvailableProxyPort()
+        {
+            var servList = servers.GetServerList()
+                .Where(s => s.isServerOn);
+
+            foreach (var serv in servList)
+            {
+                if (serv.IsSuitableToBeUsedAsSysProxy(
+                    true, out bool isSocks, out int port))
+                {
+                    return port;
+                }
+            }
+            return -1;
+        }
+
 
         void RefreshCurrentCoreVersion()
         {
@@ -92,11 +111,12 @@ namespace V2RayGCon.Views.WinForms
             catch { }
         }
 
-        void DownloadV2RayCore()
+        void DownloadV2RayCore(int proxyPort)
         {
             downloader = new Service.Downloader(setting);
             downloader.SetArchitecture(cboxArch.SelectedIndex == 1);
             downloader.SetVersion(cboxVer.Text);
+            downloader.proxyPort = proxyPort;
 
             downloader.OnProgress += (s, a) =>
             {
@@ -160,7 +180,12 @@ namespace V2RayGCon.Views.WinForms
 
             Task.Factory.StartNew(() =>
             {
-                var versions = Lib.Utils.GetCoreVersions();
+                int proxyPort = -1;
+                if (chkUseProxy.Checked)
+                {
+                    proxyPort = GetAvailableProxyPort();
+                }
+                var versions = Lib.Utils.GetCoreVersions(proxyPort);
                 try
                 {
                     elRefresh.Invoke((MethodInvoker)delegate
@@ -192,8 +217,20 @@ namespace V2RayGCon.Views.WinForms
                 return;
             }
 
+            int proxyPort = -1;
+            if (chkUseProxy.Checked)
+            {
+                proxyPort = GetAvailableProxyPort();
+                if (proxyPort <= 0)
+                {
+                    Task.Factory.StartNew(
+                        () => MessageBox.Show(
+                            I18N.NoQualifyProxyServer));
+                }
+            }
+
             btnDownload.Enabled = false;
-            DownloadV2RayCore();
+            DownloadV2RayCore(proxyPort);
         }
 
         void BtnCancel_Click(object sender, System.EventArgs e)

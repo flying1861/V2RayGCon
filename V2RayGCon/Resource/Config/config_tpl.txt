@@ -39,39 +39,37 @@
     "inbound": {},
     "outbound": {}
   },
-  "dtrMTProto": {
-    "inboundDetour": [
-      {
-        "protocol": "mtproto",
-        "port": "443",
-        "tag": "tg-in",
-        "settings": {
-          "users": [
-            {}
-          ]
-        }
-      }
-    ],
-    "outboundDetour": [
-      {
-        "protocol": "mtproto",
-        "tag": "tg-out",
-        "settings": {}
-      }
-    ],
-    "routing": {
-      "strategy": "rules",
+  "inbDtrMtProto": [
+    {
+      "protocol": "mtproto",
+      "port": "443",
+      "tag": "tg-in",
       "settings": {
-        "rules": [
-          {
-            "type": "field",
-            "inboundTag": [
-              "tg-in"
-            ],
-            "outboundTag": "tg-out"
-          }
+        "users": [
+          {}
         ]
       }
+    }
+  ],
+  "outbDtrMtProto": [
+    {
+      "protocol": "mtproto",
+      "tag": "tg-out",
+      "settings": {}
+    }
+  ],
+  "routingMtProto": {
+    "strategy": "rules",
+    "settings": {
+      "rules": [
+        {
+          "type": "field",
+          "inboundTag": [
+            "tg-in"
+          ],
+          "outboundTag": "tg-out"
+        }
+      ]
     }
   },
   "routingRules": {

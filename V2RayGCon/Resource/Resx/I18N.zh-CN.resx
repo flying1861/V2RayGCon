@@ -611,4 +611,7 @@ https://github.com/v2ray/v2ray-core</value>
   <data name="FindNoPlugin" xml:space="preserve">
     <value>没找到任何插件。</value>
   </data>
+  <data name="NoQualifyProxyServer" xml:space="preserve">
+    <value>没有可用代理服务器，转为直接下载。</value>
+  </data>
 </root>

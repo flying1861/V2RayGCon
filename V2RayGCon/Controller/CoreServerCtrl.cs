@@ -588,7 +588,7 @@ namespace V2RayGCon.Controller
                 return;
             }
 
-            InjectSkipCNSite(ref cfg);
+            InjectSkipCnSiteSettingsIntoConfig(ref cfg);
 
             server.title = GetTitle();
             server.RestartCoreThen(
@@ -602,35 +602,17 @@ namespace V2RayGCon.Controller
                 Lib.Utils.GetEnvVarsFromConfig(cfg));
         }
 
-        void InjectSkipCNSite(ref JObject config)
+        void InjectSkipCnSiteSettingsIntoConfig(ref JObject config)
         {
             if (!this.isInjectSkipCNSite)
             {
                 return;
             }
 
-            // copy from Controller.ConfigerComponent.Quick.cs
-            var c = JObject.Parse(@"{}");
-
-            var dict = new Dictionary<string, string> {
-                { "dns","dnsCFnGoogle" },
-                { "routing","routeCNIP" },
-                { "outboundDetour","outDtrFreedom" },
-            };
-
-            foreach (var item in dict)
-            {
-                var tpl = Lib.Utils.CreateJObject(item.Key);
-                var value = cache.tpl.LoadExample(item.Value);
-                tpl[item.Key] = value;
-
-                if (!Lib.Utils.Contains(config, tpl))
-                {
-                    c[item.Key] = value;
-                }
-            }
-
-            Lib.Utils.CombineConfig(ref config, c);
+            // 优先考虑兼容旧配置。
+            servers.InjectSkipCnSiteSettingsIntoConfig(
+                ref config,
+                false);
         }
 
         void SetPropertyOnDemand<T>(
