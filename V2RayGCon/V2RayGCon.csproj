@@ -475,4 +475,25 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>set "libsDir=libs\"
+
+call:CreateFolderOnDemand "%25libsDir%25"
+echo "dest %25libsDir%25"
+echo "move dll files ... "
+move /Y "*.dll" "%25libsDir%25"
+echo "move xml files ... "
+move /Y "*.xml" "%25libsDir%25" 
+echo "move pdb files ... "
+move /Y "*.pdb" "%25libsDir%25" 
+
+goto:eof
+
+:CreateFolderOnDemand
+  if not exist "%25~1" ( 
+   echo "Create dir %25~1"
+   mkdir "%25~1"
+  ) 
+goto:eof</PostBuildEvent>
+  </PropertyGroup>
 </Project>

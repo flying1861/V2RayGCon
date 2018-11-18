@@ -1,7 +1,45 @@
 ﻿{
+  "pkgV4Tpl": {
+    "log": {
+      "loglevel": "warning"
+    },
+    "v2raygcon": {
+      "alias": "PackageV4",
+      "description": ""
+    },
+    "routing": {
+      "balancers": [
+        {
+          "tag": "balancer",
+          "selector": [
+            "agentout"
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "type": "field",
+          "inboundTag": [
+            "agentin"
+          ],
+          "balancerTag": "balancer"
+        }
+      ]
+    },
+    "inbounds": [
+      {
+        "port": 1080,
+        "listen": "127.0.0.1",
+        "protocol": "socks",
+        "settings": {},
+        "tag": "agentin"
+      }
+    ],
+    "outbounds": []
+  },
   "main": {
     "v2raygcon": {
-      "alias": "Package",
+      "alias": "PackageV3",
       "description": ""
     },
     "log": {

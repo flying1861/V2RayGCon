@@ -658,7 +658,7 @@ namespace V2RayGCon.Service
 
             var dict = new Dictionary<string, string> {
                 { "dns","dnsCFnGoogle" },
-                { "routing","routeCNIP" },
+                { "routing",GetRoutingTplName(config, useV4) },
             };
 
             foreach (var item in dict)
@@ -695,6 +695,17 @@ namespace V2RayGCon.Service
                 Lib.Utils.CombineConfig(ref o, config);
                 config = o;
             }
+        }
+
+        private static string GetRoutingTplName(JObject config, bool useV4)
+        {
+            var routingRules = Lib.Utils.GetKey(config, "routing.rules");
+            var routingSettingsRules = Lib.Utils.GetKey(config, "routing.settings.rules");
+            var hasRoutingV4 = routingRules == null ? false : (routingRules is JArray);
+            var hasRoutingV3 = routingSettingsRules == null ? false : (routingSettingsRules is JArray);
+
+            var isUseRoutingV4 = !hasRoutingV3 && (useV4 || hasRoutingV4);
+            return isUseRoutingV4 ? "routeCnipV4" : "routeCNIP";
         }
 
         public void UpdateTrackerSettingNow()
@@ -881,7 +892,50 @@ namespace V2RayGCon.Service
             return serverList.Any(s => s.isSelected);
         }
 
-        public void PackSelectedServers()
+        public void PackSelectedServersIntoV4Package()
+        {
+            var list = GetSelectedServerList();
+
+            var packages = cache.tpl.LoadPackage("pkgV4Tpl");
+            var serverNameList = new List<string>();
+            var count = 0;
+
+            Action done = () =>
+            {
+                packages["v2raygcon"]["description"] = string.Join(" ", serverNameList);
+                setting.SendLog(I18N.PackageDone);
+                AddServer(packages.ToString(Formatting.None), "PackageV4");
+                UpdateMarkList();
+                Lib.UI.ShowMessageBoxDoneAsync();
+            };
+
+            Action<int, Action> worker = (index, next) =>
+            {
+                var server = list[index];
+                var outbounds = Lib.Utils.ExtractOutboundsFromConfig(server.config);
+                var num = count;
+                foreach (JObject item in outbounds)
+                {
+                    item["tag"] = "agentout" + count.ToString();
+                    count++;
+                    (packages["outbounds"] as JArray).Add(item);
+                }
+                if (count == num)
+                {
+                    setting.SendLog(I18N.PackageFail + ": " + server.name);
+                }
+                else
+                {
+                    serverNameList.Add(server.name);
+                    setting.SendLog(I18N.PackageSuccess + ": " + server.name);
+                }
+                next();
+            };
+
+            Lib.Utils.ChainActionHelperAsync(list.Count, worker, done);
+        }
+
+        public void PackSelectedServersIntoV3Package()
         {
             var list = GetSelectedServerList(true);
 
@@ -897,8 +951,8 @@ namespace V2RayGCon.Service
                 var config = cache.tpl.LoadPackage("main");
                 config["v2raygcon"]["description"] = string.Join(" ", serverNameList);
                 Lib.Utils.UnionJson(ref config, packages);
-                OnSendLogHandler(this, new VgcApis.Models.StrEvent(I18N.PackageDone));
-                AddServer(config.ToString(Formatting.None), "Package");
+                setting.SendLog(I18N.PackageDone);
+                AddServer(config.ToString(Formatting.None), "PackageV3");
                 UpdateMarkList();
                 Lib.UI.ShowMessageBoxDoneAsync();
             };
@@ -913,11 +967,11 @@ namespace V2RayGCon.Service
                     var vnext = GenVnextConfigPart(index, port, id);
                     Lib.Utils.UnionJson(ref packages, vnext);
                     serverNameList.Add(server.name);
-                    OnSendLogHandler(this, new VgcApis.Models.StrEvent(I18N.PackageSuccess + ": " + server.name));
+                    setting.SendLog(I18N.PackageSuccess + ": " + server.name);
                 }
                 catch
                 {
-                    OnSendLogHandler(this, new VgcApis.Models.StrEvent(I18N.PackageFail + ": " + server.name));
+                    setting.SendLog(I18N.PackageFail + ": " + server.name);
                 }
                 next();
             };

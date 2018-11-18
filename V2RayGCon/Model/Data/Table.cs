@@ -210,7 +210,9 @@ namespace V2RayGCon.Model.Data
             //{ 4, "routing"},
             list = NewList();
             list.Add(SS(I18N.Default, "routeAll"));
-            list.Add(SS("skip CN web site", "routeCNIP"));
+            list.Add(SS("v4", "routeDefV4"));
+            list.Add(SS("skip CN site", "routeCNIP"));
+            list.Add(SS("skip CN site v4", "routeCnipV4"));
             list.Add(SS("Inbound to Outbound", "routeIn2Out"));
             d.Add((int)Enum.Sections.Routing, list);
 

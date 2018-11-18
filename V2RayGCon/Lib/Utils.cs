@@ -23,6 +23,47 @@ namespace V2RayGCon.Lib
     {
 
         #region Json
+        public static JArray ExtractOutboundsFromConfig(string config)
+        {
+            var result = new JArray();
+            JObject json = null;
+            try
+            {
+                json = JObject.Parse(config);
+                if (json == null)
+                {
+                    return result;
+                }
+            }
+            catch { }
+            try
+            {
+                var outbound = GetKey(json, "outbound");
+                if (outbound != null && outbound is JObject)
+                {
+                    result.Add(outbound);
+                }
+            }
+            catch { }
+
+            foreach (var key in new string[] { "outboundDetour", "outbounds" })
+            {
+                try
+                {
+                    var outboundDtr = GetKey(json, key);
+                    if (outboundDtr != null && outboundDtr is JArray)
+                    {
+                        foreach (JObject item in outboundDtr)
+                        {
+                            result.Add(item);
+                        }
+                    }
+                }
+                catch { }
+            }
+            return result;
+        }
+
         /// <summary>
         /// return null if fail
         /// </summary>
@@ -462,6 +503,8 @@ namespace V2RayGCon.Lib
                     "outbounds",
                     "inboundDetour",
                     "outboundDetour",
+                    "routing.rules",
+                    "routing.balancers",
                     "routing.settings.rules"})
             {
                 if (TryExtractJObjectPart(body, key, out JObject nodeBody))
@@ -1178,7 +1221,7 @@ namespace V2RayGCon.Lib
             var portStr = address.Substring(index + 1);
             var portInt = Clamp(Str2Int(portStr), 0, 65536);
 
-            if(string.IsNullOrEmpty(ipStr) || portInt == 0)
+            if (string.IsNullOrEmpty(ipStr) || portInt == 0)
             {
                 return false;
             }

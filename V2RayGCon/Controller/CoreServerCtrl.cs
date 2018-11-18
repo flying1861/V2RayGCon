@@ -707,32 +707,11 @@ namespace V2RayGCon.Controller
             var part = protocol + "In";
             try
             {
-                var o = JObject.Parse(@"{}");
-                o["protocol"] = protocol;
-                o["listen"] = ip;
-                o["port"] = port;
-                o["settings"] = cache.tpl.LoadTemplate(part);
-
-                if (inboundType == (int)Model.Data.Enum.ProxyTypes.SOCKS)
-                {
-                    o["settings"]["ip"] = ip;
-                }
-
-                // Bug. Stream setting will mess things up.
-                // Lib.Utils.MergeJson(ref config, o);
-                var hasInbound = Lib.Utils.GetKey(config, "inbound") != null;
-                var hasInbounds = Lib.Utils.GetKey(config, "inbounds.0") != null;
-
-                if (hasInbounds && !hasInbound)
-                {
-                    config["inbounds"][0] = o;
-                }
-                else
-                {
-                    config["inbound"] = o;
-                }
-
+                JObject o = CreateInboundSetting(inboundType, ip, port, protocol, part);
+                ReplaceInboundSetting(ref config, o);
+#if DEBUG
                 var debug = config.ToString(Formatting.Indented);
+#endif
 
                 return true;
             }
@@ -741,6 +720,45 @@ namespace V2RayGCon.Controller
                 SendLog(I18N.CoreCantSetLocalAddr);
             }
             return false;
+        }
+
+        private void ReplaceInboundSetting(ref JObject config, JObject o)
+        {
+            // Bug. Stream setting will mess things up.
+            // Lib.Utils.MergeJson(ref config, o);
+            var hasInbound = Lib.Utils.GetKey(config, "inbound") != null;
+            var hasInbounds = Lib.Utils.GetKey(config, "inbounds.0") != null;
+            var isUseV4 = !hasInbound && (hasInbounds || setting.isUseV4);
+
+            if (isUseV4)
+            {
+                if (!hasInbounds)
+                {
+                    config["inbounds"] = JArray.Parse(@"[{}]");
+                }
+                config["inbounds"][0] = o;
+            }
+            else
+            {
+                config["inbound"] = o;
+            }
+        }
+
+        private JObject CreateInboundSetting(int inboundType, string ip, int port, string protocol, string part)
+        {
+            var o = JObject.Parse(@"{}");
+            o["tag"] = "agentin";
+            o["protocol"] = protocol;
+            o["listen"] = ip;
+            o["port"] = port;
+            o["settings"] = cache.tpl.LoadTemplate(part);
+
+            if (inboundType == (int)Model.Data.Enum.ProxyTypes.SOCKS)
+            {
+                o["settings"]["ip"] = ip;
+            }
+
+            return o;
         }
 
         void SendLog(string message)

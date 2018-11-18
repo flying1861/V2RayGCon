@@ -142,7 +142,7 @@ namespace V2RayGCon.Plugin
                 return null;
             }
 
-            /* debug */
+#if DEBUG
             try
             {
                 var types = assembly.GetTypes();
@@ -154,7 +154,7 @@ namespace V2RayGCon.Plugin
                     var info = e;
                 }
             }
-            /* */
+#endif
 
             var pluginType = typeof(IPlugin);
             foreach (Type type in assembly.GetTypes())
