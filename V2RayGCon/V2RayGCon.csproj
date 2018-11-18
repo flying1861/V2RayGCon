@@ -477,15 +477,10 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>set "libsDir=libs\"
+set "fileList=DotNetZip Newtonsoft ScintillaNET VgcApis zxing"
 
 call:CreateFolderOnDemand "%25libsDir%25"
-echo "dest %25libsDir%25"
-echo "move dll files ... "
-move /Y "*.dll" "%25libsDir%25"
-echo "move xml files ... "
-move /Y "*.xml" "%25libsDir%25" 
-echo "move pdb files ... "
-move /Y "*.pdb" "%25libsDir%25" 
+call:MoveFilesByList "%25fileList%25"
 
 goto:eof
 
@@ -493,6 +488,13 @@ goto:eof
   if not exist "%25~1" ( 
    echo "Create dir %25~1"
    mkdir "%25~1"
+  ) 
+goto:eof
+
+:MoveFilesByList
+  for %25%25i in (%25~1) do ( 
+    echo "move files %25%25i"
+	move /Y "%25%25i*" "%25libsDir%25"
   ) 
 goto:eof</PostBuildEvent>
   </PropertyGroup>
