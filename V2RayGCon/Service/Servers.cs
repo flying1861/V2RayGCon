@@ -58,11 +58,17 @@ namespace V2RayGCon.Service
 
         #region interface for plugins
         public ReadOnlyCollection<VgcApis.Models.ICoreCtrl> GetTrackableServerList()
-           => serverList
-               .Where(s => s.isServerOn && !s.isUntrack)
-               .Select(s => s as VgcApis.Models.ICoreCtrl)
-               .ToList()
-               .AsReadOnly();
+            => serverList
+                .Where(s => s.isServerOn && !s.isUntrack)
+                .Select(s => s as VgcApis.Models.ICoreCtrl)
+                .ToList()
+                .AsReadOnly();
+
+        public ReadOnlyCollection<VgcApis.Models.ICoreCtrl> GetAllServersList()
+            => serverList
+                .Select(s => s as VgcApis.Models.ICoreCtrl)
+                .ToList()
+                .AsReadOnly();
         #endregion
 
         #region property
@@ -892,9 +898,14 @@ namespace V2RayGCon.Service
             return serverList.Any(s => s.isSelected);
         }
 
-        public void PackSelectedServersIntoV4Package()
+        public void PackServersIntoV4Package(
+            List<VgcApis.Models.ICoreCtrl> servList)
         {
-            var list = GetSelectedServerList();
+            if (serverList == null || serverList.Count <= 0)
+            {
+                Task.Factory.StartNew(() => MessageBox.Show(I18N.ListIsEmpty));
+                return;
+            }
 
             var packages = cache.tpl.LoadPackage("pkgV4Tpl");
             var serverNameList = new List<string>();
@@ -911,34 +922,38 @@ namespace V2RayGCon.Service
 
             Action<int, Action> worker = (index, next) =>
             {
-                var server = list[index];
-                var outbounds = Lib.Utils.ExtractOutboundsFromConfig(server.config);
+                var server = servList[index];
+                var outbounds = Lib.Utils.ExtractOutboundsFromConfig(server.GetConfig());
                 var num = count;
                 foreach (JObject item in outbounds)
                 {
-                    item["tag"] = "agentout" + count.ToString();
+                    item["tag"] = string.Format("agentout{0}t{1}", index, count.ToString());
                     count++;
                     (packages["outbounds"] as JArray).Add(item);
                 }
                 if (count == num)
                 {
-                    setting.SendLog(I18N.PackageFail + ": " + server.name);
+                    setting.SendLog(I18N.PackageFail + ": " + server.GetName());
                 }
                 else
                 {
-                    serverNameList.Add(server.name);
-                    setting.SendLog(I18N.PackageSuccess + ": " + server.name);
+                    serverNameList.Add(
+                        string.Format(
+                            "{0}.[{1}]",
+                            index,
+                            server.GetName()));
+
+                    setting.SendLog(I18N.PackageSuccess + ": " + server.GetName());
                 }
                 next();
             };
 
-            Lib.Utils.ChainActionHelperAsync(list.Count, worker, done);
+            Lib.Utils.ChainActionHelperAsync(servList.Count, worker, done);
         }
 
-        public void PackSelectedServersIntoV3Package()
+        public void PackServersIntoV3Package(
+            List<VgcApis.Models.ICoreCtrl> servList)
         {
-            var list = GetSelectedServerList(true);
-
             var packages = JObject.Parse(@"{}");
             var serverNameList = new List<string>();
 
@@ -959,24 +974,31 @@ namespace V2RayGCon.Service
 
             Action<int, Action> worker = (index, next) =>
             {
-                var server = list[index];
+                var server = servList[index];
                 try
                 {
-                    var package = ExtractOutboundInfoFromConfig(server.config, id, port, index, tagPrefix);
+                    var package = ExtractOutboundInfoFromConfig(
+                        server.GetConfig(), id, port, index, tagPrefix);
                     Lib.Utils.UnionJson(ref packages, package);
                     var vnext = GenVnextConfigPart(index, port, id);
                     Lib.Utils.UnionJson(ref packages, vnext);
-                    serverNameList.Add(server.name);
-                    setting.SendLog(I18N.PackageSuccess + ": " + server.name);
+
+                    serverNameList.Add(
+                        string.Format(
+                            "{0}.[{1}]",
+                            index,
+                            server.GetName()));
+
+                    setting.SendLog(I18N.PackageSuccess + ": " + server.GetName());
                 }
                 catch
                 {
-                    setting.SendLog(I18N.PackageFail + ": " + server.name);
+                    setting.SendLog(I18N.PackageFail + ": " + server.GetName());
                 }
                 next();
             };
 
-            Lib.Utils.ChainActionHelperAsync(list.Count, worker, done);
+            Lib.Utils.ChainActionHelperAsync(servList.Count, worker, done);
         }
 
         public bool RunSpeedTestOnSelectedServers()

@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
@@ -31,9 +32,10 @@ namespace V2RayGCon.Controller
         /// </summary>
         public event EventHandler<VgcApis.Models.BoolEvent> OnRequireKeepTrack;
 
+        // private variables will not be serialized
         public string config; // plain text of config.json
         public bool isAutoRun, isInjectImport, isSelected, isInjectSkipCNSite, isUntrack;
-        public string name, summary, inboundIP, mark;
+        public string name, summary, inboundIP, mark, uid;
         public int overwriteInboundType, inboundPort, foldingLevel;
         public double index;
 
@@ -55,6 +57,7 @@ namespace V2RayGCon.Controller
             name = string.Empty;
             summary = string.Empty;
             config = string.Empty;
+            uid = string.Empty;
             speedTestResult = -1;
 
             overwriteInboundType = 1;
@@ -75,6 +78,10 @@ namespace V2RayGCon.Controller
             server.OnLog += OnLogHandler;
             server.OnCoreStatusChanged += OnCoreStateChangedHandler;
         }
+
+        #region properties
+
+        #endregion
 
         #region non-serialize properties
         [JsonIgnore]
@@ -120,12 +127,31 @@ namespace V2RayGCon.Controller
         #endregion
 
         #region ICoreCtrl interface
+        public string GetName() => this.name;
         public string GetConfig() => this.config;
         public bool IsCoreRunning() => this.isServerOn;
         public bool IsUntrack() => this.isUntrack;
+        public bool IsSelected() => this.isSelected;
         #endregion
 
         #region public method
+        public string GetUid()
+        {
+            if (string.IsNullOrEmpty(uid))
+            {
+                var uidList = servers
+                    .GetServerList()
+                    .Select(s => s.uid)
+                    .ToList();
+                do
+                {
+                    uid = Lib.Utils.RandomHex(16);
+                } while (uidList.Contains(uid));
+                InvokeEventOnPropertyChange();
+            }
+            return uid;
+        }
+
         public void SetIPandPortOnDemand(string ip, int port)
         {
             var changed = false;

@@ -2,10 +2,12 @@
 {
     public interface ICoreCtrl
     {
+        string GetUid();
         string GetConfig();
+        string GetName();
 
         bool IsCoreRunning();
-
+        bool IsSelected();
         bool IsUntrack();
 
         bool IsSuitableToBeUsedAsSysProxy(

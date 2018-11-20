@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PluginInfoUI));
             this.chkIsUse = new System.Windows.Forms.CheckBox();
             this.lbDescription = new System.Windows.Forms.Label();
-            this.lbName = new System.Windows.Forms.Label();
             this.lbFilename = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -48,12 +47,6 @@
             resources.ApplyResources(this.lbDescription, "lbDescription");
             this.lbDescription.Name = "lbDescription";
             // 
-            // lbName
-            // 
-            this.lbName.AutoEllipsis = true;
-            resources.ApplyResources(this.lbName, "lbName");
-            this.lbName.Name = "lbName";
-            // 
             // lbFilename
             // 
             this.lbFilename.AutoEllipsis = true;
@@ -67,7 +60,6 @@
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.lbDescription);
             this.Controls.Add(this.lbFilename);
-            this.Controls.Add(this.lbName);
             this.Controls.Add(this.chkIsUse);
             this.Name = "PluginInfoUI";
             this.ResumeLayout(false);
@@ -79,7 +71,6 @@
 
         private System.Windows.Forms.CheckBox chkIsUse;
         private System.Windows.Forms.Label lbDescription;
-        private System.Windows.Forms.Label lbName;
         private System.Windows.Forms.Label lbFilename;
     }
 }

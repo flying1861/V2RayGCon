@@ -90,29 +90,17 @@ namespace V2RayGCon.Service
         {
             var pluginList = new Dictionary<string, VgcApis.IPlugin>();
 
-            var dllFileNames = SearchDllFiles();
-            if (dllFileNames == null)
+            var plugins = new VgcApis.IPlugin[] {
+                new Pacman.Pacman(),
+#if !DISABLE_PROXY_SETTER
+                new ProxySetter.ProxySetter(),
+#endif
+            };
+
+            foreach (var plugin in plugins)
             {
-                return pluginList;
+                pluginList.Add(plugin.Name, plugin);
             }
-
-            foreach (var relativeFilePath in dllFileNames)
-            {
-                if (!Lib.Utils.IsTrustedPlugin(relativeFilePath))
-                {
-                    continue;
-                }
-
-                var plugin = Plugin.Sandboxer.LoadTrustedPlugin(relativeFilePath);
-                if (plugin == null)
-                {
-                    continue;
-                }
-
-                var key = Path.GetFileName(relativeFilePath);
-                pluginList[key] = plugin;
-            }
-
             return pluginList;
         }
 

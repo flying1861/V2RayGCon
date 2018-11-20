@@ -252,10 +252,4 @@
     <value>core</value>
     <comment>V2RayGCon\core\v2ray.exe</comment>
   </data>
-  <data name="PluginsDebugList" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\PluginsList\PluginsDebugList.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="PluginsReleaseList" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\PluginsList\PluginsReleaseList.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
 </root>

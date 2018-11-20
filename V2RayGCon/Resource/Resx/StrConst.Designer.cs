@@ -143,32 +143,34 @@ namespace V2RayGCon.Resource.Resx {
         
         /// <summary>
         ///   查找类似 {
-        ///  &quot;main&quot;: {
-        ///    &quot;v2raygcon&quot;: {
-        ///      &quot;alias&quot;: &quot;Package&quot;,
-        ///      &quot;description&quot;: &quot;&quot;
-        ///    },
+        ///  &quot;pkgV4Tpl&quot;: {
         ///    &quot;log&quot;: {
         ///      &quot;loglevel&quot;: &quot;warning&quot;
         ///    },
-        ///    &quot;inbound&quot;: {
-        ///      &quot;port&quot;: 1080,
-        ///      &quot;listen&quot;: &quot;127.0.0.1&quot;,
-        ///      &quot;protocol&quot;: &quot;socks&quot;,
-        ///      &quot;settings&quot;: {
-        ///        &quot;auth&quot;: &quot;noauth&quot;,
-        ///        &quot;udp&quot;: false,
-        ///        &quot;ip&quot;: &quot;127.0.0.1&quot;
-        ///      }
+        ///    &quot;v2raygcon&quot;: {
+        ///      &quot;alias&quot;: &quot;PackageV4&quot;,
+        ///      &quot;description&quot;: &quot;&quot;
         ///    },
-        ///    &quot;outbound&quot;: {
-        ///      &quot;mux&quot;: {
-        ///        &quot;enabled&quot;: true,
-        ///        &quot;concurrency&quot;: 24
-        ///      },
-        ///      &quot;protocol&quot;: &quot;vmess&quot;,
-        ///      &quot;tag&quot;: &quot;agentout&quot;
-        ///   [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///    &quot;routing&quot;: {
+        ///      &quot;balancers&quot;: [
+        ///        {
+        ///          &quot;tag&quot;: &quot;balancer&quot;,
+        ///          &quot;selector&quot;: [
+        ///            &quot;agentout&quot;
+        ///          ]
+        ///        }
+        ///      ],
+        ///      &quot;rules&quot;: [
+        ///        {
+        ///          &quot;type&quot;: &quot;field&quot;,
+        ///          &quot;inboundTag&quot;: [
+        ///            &quot;agentin&quot;
+        ///          ],
+        ///          &quot;balancerTag&quot;: &quot;balancer&quot;
+        ///        }
+        ///      ]
+        ///    },
+        ///    &quot;inbo [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string config_pkg {
             get {
@@ -460,28 +462,6 @@ namespace V2RayGCon.Resource.Resx {
         internal static string PkgWin64 {
             get {
                 return ResourceManager.GetString("PkgWin64", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 {
-        ///  &quot;ProxySetter.dll&quot;: &quot;auto set system proxy&quot;
-        ///} 的本地化字符串。
-        /// </summary>
-        internal static string PluginsDebugList {
-            get {
-                return ResourceManager.GetString("PluginsDebugList", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 {
-        ///  &quot;880efe3b61cb4b5d0cf53c181465872cf8c0bd7c8d941a00d3310655a0f1f483&quot;: &quot;ProxySetter v0.0.1 release 2018.11.11&quot;
-        ///} 的本地化字符串。
-        /// </summary>
-        internal static string PluginsReleaseList {
-            get {
-                return ResourceManager.GetString("PluginsReleaseList", resourceCulture);
             }
         }
         

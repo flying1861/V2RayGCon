@@ -89,13 +89,20 @@ namespace V2RayGCon.Controller.FormMainComponent
 
             packSelected.Click += ApplyActionOnSelectedServers(() =>
             {
+                var list = servers
+                    .GetServerList()
+                    .Where(s => s.isSelected)
+                    .Select(s => s as VgcApis.Models.ICoreCtrl)
+                    .ToList();
+
                 if (setting.isUseV4)
                 {
-                    servers.PackSelectedServersIntoV4Package();
+                    servers.PackServersIntoV4Package(list);
                 }
                 else
                 {
-                    servers.PackSelectedServersIntoV3Package();
+                    list.Reverse();
+                    servers.PackServersIntoV3Package(list);
                 }
             });
 

@@ -1032,42 +1032,6 @@ namespace V2RayGCon.Lib
         #endregion
 
         #region files
-        static bool IsTrustedPluginFileName(string path)
-        {
-            try
-            {
-                var fileName = Path.GetFileName(path);
-                return JsonConvert
-                 .DeserializeObject<Dictionary<string, string>>(StrConst.PluginsDebugList)
-                 .Keys
-                 .ToList()
-                 .Contains(fileName);
-            }
-            catch { }
-            return false;
-        }
-
-        static bool IsTrustedPluginSha256Sum(string sha256Sum)
-            => JsonConvert
-                 .DeserializeObject<Dictionary<string, string>>(StrConst.PluginsReleaseList)
-                 .Keys
-                 .ToList()
-                 .Contains(sha256Sum);
-
-        public static bool IsTrustedPlugin(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-            {
-                return false;
-            }
-
-#if DEBUG
-            return IsTrustedPluginFileName(path);
-#else
-            return IsTrustedPluginSha256Sum(GetChecksum(path));
-#endif
-        }
-
         static string GetChecksum(string file)
         {
             // http://peterkellner.net/2010/11/24/efficiently-generating-sha256-checksum-for-files-using-csharp/
@@ -1475,8 +1439,6 @@ namespace V2RayGCon.Lib
                 StrConst.config_min,
                 StrConst.config_tpl,
                 StrConst.config_pkg,
-                StrConst.PluginsDebugList,
-                StrConst.PluginsReleaseList,
             };
         }
         #endregion

@@ -629,4 +629,7 @@ Please delete {0} in app folder.</value>
     <value>No qualify proxy server available!
 Switch to direct download.</value>
   </data>
+  <data name="ListIsEmpty" xml:space="preserve">
+    <value>List is empty!</value>
+  </data>
 </root>

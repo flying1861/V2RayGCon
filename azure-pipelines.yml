@@ -9,7 +9,7 @@ pool:
 variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+  buildConfiguration: 'DisableProxySetter'
 
 steps:
 - task: NuGetToolInstaller@0
@@ -33,7 +33,7 @@ steps:
 # Archive files using compression formats such as .7z, .rar, .tar.gz, and .zip.
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: '$(Build.SourcesDirectory)/V2RayGCon/bin/Release/'
+    rootFolderOrFile: '$(Build.SourcesDirectory)/V2RayGCon/bin/DisableProxySetter/'
     includeRootFolder: false
     archiveType: 'zip' # Options: zip, 7z, tar, wim
     #tarCompression: 'gz' # Optional. Options: gz, bz2, xz, none
@@ -45,7 +45,7 @@ steps:
 - task: ExtractFiles@1
   inputs:
     archiveFilePatterns: '$(Build.SourcesDirectory)/V2RayGCon/Resource/Pkg/v2ray-windows-32.zip'
-    destinationFolder: '$(Build.SourcesDirectory)/V2RayGCon/bin/Release/core'
+    destinationFolder: '$(Build.SourcesDirectory)/V2RayGCon/bin/DisableProxySetter/core'
     cleanDestinationFolder: true
 
 # Extract Files
@@ -53,14 +53,14 @@ steps:
 - task: ExtractFiles@1
   inputs:
     archiveFilePatterns: '$(Build.SourcesDirectory)/V2RayGCon/Resource/Pkg/vgctpl.zip'
-    destinationFolder: '$(Build.SourcesDirectory)/V2RayGCon/bin/Release/VGCTpl'
+    destinationFolder: '$(Build.SourcesDirectory)/V2RayGCon/bin/DisableProxySetter/VGCTpl'
     cleanDestinationFolder: true
 
 # Archive Files
 # Archive files using compression formats such as .7z, .rar, .tar.gz, and .zip.
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: '$(Build.SourcesDirectory)/V2RayGCon/bin/Release/'
+    rootFolderOrFile: '$(Build.SourcesDirectory)/V2RayGCon/bin/DisableProxySetter/'
     includeRootFolder: false
     archiveType: 'zip' # Options: zip, 7z, tar, wim
     #tarCompression: 'gz' # Optional. Options: gz, bz2, xz, none

@@ -10,8 +10,7 @@ namespace V2RayGCon.Views.UserControls
         {
             curInfo = pluginInfo;
             InitializeComponent();
-            lbFilename.Text = pluginInfo.filename;
-            lbName.Text = pluginInfo.name + " v" + pluginInfo.version;
+            lbFilename.Text = pluginInfo.name + " v" + pluginInfo.version;
             lbDescription.Text = pluginInfo.description;
             chkIsUse.Checked = pluginInfo.isUse;
         }

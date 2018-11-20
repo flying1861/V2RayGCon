@@ -7,7 +7,10 @@ using V2RayGCon.Resource.Resx;
 
 namespace V2RayGCon.Views.UserControls
 {
-    public partial class ServerUI : UserControl, Model.BaseClass.IFormMainFlyPanelComponent
+    public partial class ServerUI :
+        UserControl,
+        Model.BaseClass.IFormMainFlyPanelComponent,
+        VgcApis.Models.IDropableControl
     {
         Service.Setting setting;
         Service.Servers servers;
@@ -43,6 +46,18 @@ namespace V2RayGCon.Views.UserControls
             this.serverItem.OnPropertyChanged += RefreshUI;
             rtboxServerTitle.BackColor = this.BackColor;
         }
+
+        #region interface VgcApis.Models.IDropableControl
+        public string GetTitle()
+        {
+            return this.serverItem.GetTitle();
+        }
+
+        public string GetUid()
+        {
+            return this.serverItem.GetUid();
+        }
+        #endregion
 
         #region private method
         private void HighLightTitleWithKeywords()
