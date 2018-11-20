@@ -176,6 +176,6 @@
   <PropertyGroup>
     <PreBuildEvent>rem microshit defender forbit any code that modifys regitry
 rem this plugin is removed sine version 1.1.3
-rem R.I.P ProxySetter</PreBuildEvent>
+rem R.I.P. ProxySetter</PreBuildEvent>
   </PropertyGroup>
 </Project>
