@@ -39,20 +39,6 @@ namespace V2RayGCon.Test
             Assert.AreEqual(sOrg, sClone);
         }
 
-
-        [DataTestMethod]
-        [DataRow("", false)]
-        [DataRow(null, false)]
-        [DataRow("VeryAwesomePlugin.dll", false)]
-#if DEBUG
-        [DataRow("ProxySetter.dll", true)]
-#endif
-        public void IsTrustedPluginTest(string source, bool expect)
-        {
-            var result = Lib.Utils.IsTrustedPlugin(source);
-            Assert.AreEqual(expect, result);
-        }
-
         [DataTestMethod]
         [DataRow("", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")]
         [DataRow(null, "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")]
