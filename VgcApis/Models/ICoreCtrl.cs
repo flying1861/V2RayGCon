@@ -2,6 +2,8 @@
 {
     public interface ICoreCtrl
     {
+        string GetStatus();
+        string GetTitle();
         string GetUid();
         string GetConfig();
         string GetName();
@@ -14,7 +16,5 @@
             bool isGlobal,
             out bool isSocks,
             out int port);
-
-        string GetTitle();
     }
 }

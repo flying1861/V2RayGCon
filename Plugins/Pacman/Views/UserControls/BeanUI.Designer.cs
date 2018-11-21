@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BeanUI));
             this.chkTitle = new System.Windows.Forms.CheckBox();
+            this.lbStatus = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // chkTitle
@@ -41,11 +42,20 @@
             this.chkTitle.UseVisualStyleBackColor = true;
             this.chkTitle.CheckedChanged += new System.EventHandler(this.chkTitle_CheckedChanged);
             // 
+            // lbStatus
+            // 
+            this.lbStatus.AutoEllipsis = true;
+            this.lbStatus.ForeColor = System.Drawing.Color.Red;
+            resources.ApplyResources(this.lbStatus, "lbStatus");
+            this.lbStatus.Name = "lbStatus";
+            this.lbStatus.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lbStatus_MouseDown);
+            // 
             // BeanUI
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.lbStatus);
             this.Controls.Add(this.chkTitle);
             this.Cursor = System.Windows.Forms.Cursors.SizeAll;
             this.Name = "BeanUI";
@@ -58,5 +68,6 @@
         #endregion
 
         private System.Windows.Forms.CheckBox chkTitle;
+        private System.Windows.Forms.Label lbStatus;
     }
 }

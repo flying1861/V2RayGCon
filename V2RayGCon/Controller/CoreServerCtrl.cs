@@ -128,6 +128,7 @@ namespace V2RayGCon.Controller
 
         #region ICoreCtrl interface
         public string GetName() => this.name;
+        public string GetStatus() => this.status;
         public string GetConfig() => this.config;
         public bool IsCoreRunning() => this.isServerOn;
         public bool IsUntrack() => this.isUntrack;

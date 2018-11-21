@@ -202,6 +202,7 @@ namespace Pacman.Controllers
                         flyContent.Controls.Remove(b);
                         return;
                     }
+                    b.SetStatus(c.GetStatus());
                     b.SetTitle(c.GetTitle());
                 });
 
