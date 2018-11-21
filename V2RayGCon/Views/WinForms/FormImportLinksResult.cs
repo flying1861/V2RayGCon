@@ -1,13 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using V2RayGCon.Resource.Resx;
 
 namespace V2RayGCon.Views.WinForms
 {
@@ -21,9 +14,8 @@ namespace V2RayGCon.Views.WinForms
             results = importResults;
             linksCache = new List<string>();
 
-#if DEBUG
-            this.Icon = Properties.Resources.icon_light;
-#endif
+            VgcApis.Libs.UI.AutoSetFormIcon(this);
+
             this.Show();
         }
 

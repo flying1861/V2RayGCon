@@ -7,7 +7,7 @@
         string Version { get; }
         string Description { get; }
 
-        void Run(IApi api);
+        void Run(IServices api);
         void Show();
         void Cleanup();
     }

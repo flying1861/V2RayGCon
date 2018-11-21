@@ -37,9 +37,7 @@ namespace V2RayGCon.Views.WinForms
                 setting.LazyGC();
             };
 
-#if DEBUG
-            this.Icon = Properties.Resources.icon_light;
-#endif
+            VgcApis.Libs.UI.AutoSetFormIcon(this);
 
             this.Show();
         }

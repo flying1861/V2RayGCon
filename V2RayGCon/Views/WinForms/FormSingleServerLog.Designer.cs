@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormLog));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSingleServerLog));
             this.rtBoxLogger = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
@@ -40,12 +40,12 @@
             this.rtBoxLogger.ReadOnly = true;
             this.rtBoxLogger.TextChanged += new System.EventHandler(this.rtBoxLogger_TextChanged);
             // 
-            // FormLog
+            // FormSingleServerLog
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.rtBoxLogger);
-            this.Name = "FormLog";
+            this.Name = "FormSingleServerLog";
             this.ResumeLayout(false);
 
         }

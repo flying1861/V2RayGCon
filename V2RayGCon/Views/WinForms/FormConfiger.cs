@@ -48,10 +48,7 @@ namespace V2RayGCon.Views.WinForms
             formTitle = this.Text;
             this.originalConfigString = originalConfigString;
 
-#if DEBUG
-            this.Icon = Properties.Resources.icon_light;
-#endif
-
+            VgcApis.Libs.UI.AutoSetFormIcon(this);
             this.Show();
         }
 

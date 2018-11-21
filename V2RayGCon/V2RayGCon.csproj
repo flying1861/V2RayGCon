@@ -36,8 +36,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>
-    </CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>V2RayGCon.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -47,8 +46,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>
-    </CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>V2RayGCon.ruleset</CodeAnalysisRuleSet>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup>
@@ -87,7 +85,7 @@
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>V2RayGCon.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DotNetZip, Version=1.11.0.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
@@ -158,7 +156,6 @@
     <Compile Include="Model\Data\PluginInfoItem.cs" />
     <Compile Include="Model\Data\ServerTracker.cs" />
     <Compile Include="Model\Data\UserSettings.cs" />
-    <Compile Include="Plugin\Apis\ApiUtils.cs" />
     <Compile Include="Service\Core.cs" />
     <Compile Include="Model\BaseClass\ICacheComponent.cs" />
     <Compile Include="Model\BaseClass\FormComponentController.cs" />
@@ -436,12 +433,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resource\Icon\icon_dark.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resource\Icon\icon_light.ico" />
+    <None Include="V2RayGCon.ruleset" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon_dark.ico" />
@@ -476,11 +468,11 @@
     <Folder Include="Resource\Icon\FormMainToolStrip\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Pacman\Pacman.csproj">
+    <ProjectReference Include="..\Plugins\Pacman\Pacman.csproj">
       <Project>{78aaefc7-621e-45c8-8524-3aba221336f6}</Project>
       <Name>Pacman</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ProxySetter\ProxySetter.csproj">
+    <ProjectReference Include="..\Plugins\ProxySetter\ProxySetter.csproj">
       <Project>{8ddda069-8b11-4b48-93c1-c608bff0c361}</Project>
       <Name>ProxySetter</Name>
     </ProjectReference>

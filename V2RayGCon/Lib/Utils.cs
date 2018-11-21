@@ -64,67 +64,6 @@ namespace V2RayGCon.Lib
             return result;
         }
 
-        /// <summary>
-        /// return null if fail
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="a"></param>
-        /// <returns></returns>
-        public static T Clone<T>(T a) where T : class
-        {
-            if (a == null)
-            {
-                return null;
-            }
-
-            try
-            {
-                return JsonConvert.DeserializeObject<T>(
-                    JsonConvert.SerializeObject(a));
-            }
-            catch { }
-            return null;
-        }
-
-        /// <summary>
-        /// return null if fail
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="content"></param>
-        /// <returns></returns>
-        public static T DeserializeObject<T>(string content) where T : class
-        {
-            if (string.IsNullOrEmpty(content))
-            {
-                return null;
-            }
-
-            try
-            {
-                var result = JsonConvert.DeserializeObject<T>(content);
-                if (result != null)
-                {
-                    return result;
-                }
-            }
-            catch { }
-            return null;
-        }
-
-        /// <summary>
-        /// return null if fail
-        /// </summary>
-        /// <param name="serializeObject"></param>
-        /// <returns></returns>
-        public static string SerializeObject(object serializeObject)
-        {
-            if (serializeObject == null)
-            {
-                return null;
-            }
-            return JsonConvert.SerializeObject(serializeObject);
-        }
-
         public static string GetConfigRoot(bool isInbound, bool isV4)
         {
             return (isInbound ? "inbound" : "outbound")

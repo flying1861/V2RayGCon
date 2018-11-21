@@ -30,9 +30,7 @@ namespace V2RayGCon.Views.WinForms
             servers = Service.Servers.Instance;
             setting = Service.Setting.Instance;
 
-#if DEBUG
-            this.Icon = Properties.Resources.icon_light;
-#endif
+            VgcApis.Libs.UI.AutoSetFormIcon(this);
             this.Show();
 
             this.FormClosed += (s, a) =>

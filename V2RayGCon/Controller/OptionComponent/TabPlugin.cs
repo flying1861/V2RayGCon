@@ -73,7 +73,7 @@ namespace V2RayGCon.Controller.OptionComponent
 
         void MarkdownCurOption()
         {
-            this.oldOptions = Lib.Utils.SerializeObject(curPluginInfos);
+            this.oldOptions = JsonConvert.SerializeObject(curPluginInfos);
         }
 
         void RemoveAllControls()

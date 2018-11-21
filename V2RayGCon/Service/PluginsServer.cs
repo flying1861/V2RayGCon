@@ -88,11 +88,14 @@ namespace V2RayGCon.Service
 
         public Dictionary<string, VgcApis.IPlugin> SearchForPlugins()
         {
+            // Original design of plugins would load dll files from file system.
+            // That is why loading logic looks so complex.
             var pluginList = new Dictionary<string, VgcApis.IPlugin>();
-
             var plugins = new VgcApis.IPlugin[] {
                 new Pacman.Pacman(),
+
 #if !DISABLE_PROXY_SETTER
+                // Many thanks to windows defender
                 new ProxySetter.ProxySetter(),
 #endif
             };

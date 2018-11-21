@@ -105,11 +105,7 @@ namespace V2RayGCon.Service
             ni = new NotifyIcon
             {
                 Text = I18N.Description,
-#if DEBUG
-                Icon = Properties.Resources.icon_light,
-#else
-                Icon = Properties.Resources.icon_dark,
-#endif
+                Icon = VgcApis.Libs.UI.GetAppIcon(),
                 BalloonTipTitle = Properties.Resources.AppName,
 
                 ContextMenuStrip = CreateMenu(),

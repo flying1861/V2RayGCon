@@ -169,26 +169,6 @@ namespace V2RayGCon.Properties {
         }
         
         /// <summary>
-        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
-        /// </summary>
-        internal static System.Drawing.Icon icon_dark {
-            get {
-                object obj = ResourceManager.GetObject("icon_dark", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
-        /// </summary>
-        internal static System.Drawing.Icon icon_light {
-            get {
-                object obj = ResourceManager.GetObject("icon_light", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 https://github.com/nobody3u/V2RayGCon/issues 的本地化字符串。
         /// </summary>
         internal static string IssueLink {
@@ -284,7 +264,7 @@ namespace V2RayGCon.Properties {
         }
         
         /// <summary>
-        ///   查找类似 1.1.3 的本地化字符串。
+        ///   查找类似 1.1.3.2 的本地化字符串。
         /// </summary>
         internal static string Version {
             get {

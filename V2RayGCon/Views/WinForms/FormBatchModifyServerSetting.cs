@@ -28,11 +28,7 @@ namespace V2RayGCon.Views.WinForms
 
             InitializeComponent();
 
-#if DEBUG
-            this.Icon = Properties.Resources.icon_light;
-#else
-            this.Icon = Properties.Resources.icon_dark;
-#endif
+            VgcApis.Libs.UI.AutoSetFormIcon(this);
             this.Show();
         }
 

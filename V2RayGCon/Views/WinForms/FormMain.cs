@@ -30,10 +30,7 @@ namespace V2RayGCon.Views.WinForms
             servers = Service.Servers.Instance;
 
             InitializeComponent();
-
-#if DEBUG
-            this.Icon = Properties.Resources.icon_light;
-#endif
+            VgcApis.Libs.UI.AutoSetFormIcon(this);
             Lib.UI.AutoScaleToolSripControls(this, 16);
             this.Show();
         }

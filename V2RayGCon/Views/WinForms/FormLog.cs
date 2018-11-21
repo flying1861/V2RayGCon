@@ -38,10 +38,7 @@ namespace V2RayGCon.Views.WinForms
 
             Lib.UI.SetFormLocation<FormLog>(this, Model.Data.Enum.FormLocations.BottomLeft);
 
-#if DEBUG
-            this.Icon = Properties.Resources.icon_light;
-#endif
-
+            VgcApis.Libs.UI.AutoSetFormIcon(this);
             this.Show();
 
             rtBoxLogger.Text = setting.logCache;

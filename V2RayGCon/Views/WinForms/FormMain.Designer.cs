@@ -168,6 +168,7 @@ namespace V2RayGCon.Views.WinForms
             // toolStrip1
             // 
             resources.ApplyResources(this.toolStrip1, "toolStrip1");
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonSelectAllCurPage,
             this.toolStripButtonInverseSelectionCurPage,
@@ -731,6 +732,7 @@ namespace V2RayGCon.Views.WinForms
             // 
             // statusStrip1
             // 
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelTotal,
             this.toolStripDropDownButtonPager,

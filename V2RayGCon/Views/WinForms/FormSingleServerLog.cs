@@ -23,12 +23,8 @@ namespace V2RayGCon.Views.WinForms
                 serverItem.OnLog -= OnLogHandler;
             };
 
-#if DEBUG
-            this.Icon = Properties.Resources.icon_light;
-#endif
-
+            VgcApis.Libs.UI.AutoSetFormIcon(this);
             this.Show();
-
             this.Text = I18N.Log + " - " + serverItem.summary;
             rtBoxLogger.Text = serverItem.LogCache;
             serverItem.OnLog += OnLogHandler;
