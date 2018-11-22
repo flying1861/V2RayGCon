@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
@@ -7,12 +6,11 @@ namespace V2RayGCon.Views.WinForms
 {
     public partial class FormSingleServerLog : Form
     {
-        int maxNumberLines;
         Controller.CoreServerCtrl serverItem;
+        Timer updateLogTimer = new Timer { Interval = 500 };
 
         public FormSingleServerLog(Controller.CoreServerCtrl serverItem)
         {
-            maxNumberLines = Service.Setting.Instance.maxLogLines;
 
             this.serverItem = serverItem;
 
@@ -20,42 +18,59 @@ namespace V2RayGCon.Views.WinForms
 
             this.FormClosed += (s, e) =>
             {
-                serverItem.OnLog -= OnLogHandler;
+                if (updateLogTimer != null)
+                {
+                    updateLogTimer.Stop();
+                    updateLogTimer.Tick -= UpdateLog;
+                    updateLogTimer.Dispose();
+                }
             };
 
             VgcApis.Libs.UI.AutoSetFormIcon(this);
             this.Show();
             this.Text = I18N.Log + " - " + serverItem.summary;
-            rtBoxLogger.Text = serverItem.LogCache;
-            serverItem.OnLog += OnLogHandler;
         }
 
-        private void OnLogHandler(object sender, VgcApis.Models.StrEvent args)
+        private void FormSingleServerLog_Load(object sender, System.EventArgs e)
         {
-            Task.Factory.StartNew(() =>
-            {
-                var content = args.Data;
-                try
-                {
-                    rtBoxLogger.Invoke((MethodInvoker)delegate
-                    {
-                        if (rtBoxLogger.Lines.Length >= maxNumberLines - 1)
-                        {
-                            rtBoxLogger.Lines = rtBoxLogger.Lines.Skip(rtBoxLogger.Lines.Length - maxNumberLines).ToArray();
-                        }
-                        rtBoxLogger.AppendText(content + System.Environment.NewLine);
-                    });
-                }
-                catch { }
-            });
+            updateLogTimer.Tick += UpdateLog;
+            updateLogTimer.Start();
         }
 
-        private void rtBoxLogger_TextChanged(object sender, System.EventArgs e)
+        private void ScrollToBottom()
         {
-            // set the current caret position to the end
             rtBoxLogger.SelectionStart = rtBoxLogger.Text.Length;
-            // scroll it automatically
             rtBoxLogger.ScrollToCaret();
+        }
+
+        readonly object updateLogLocker = new object();
+        bool isUpdating = false;
+        long updateTimeStamp = DateTime.Now.Ticks;
+
+        void UpdateLog(object sender, EventArgs args)
+        {
+            lock (updateLogLocker)
+            {
+                if (isUpdating || updateTimeStamp == serverItem.logTimeStamp)
+                {
+                    return;
+                }
+                isUpdating = true;
+            }
+
+            try
+            {
+                updateTimeStamp = serverItem.logTimeStamp;
+                rtBoxLogger.Text = serverItem.logCache;
+                ScrollToBottom();
+            }
+            catch { }
+
+            lock (updateLogLocker)
+            {
+                isUpdating = false;
+            }
+
         }
     }
 }

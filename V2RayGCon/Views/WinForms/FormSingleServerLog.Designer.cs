@@ -38,7 +38,6 @@
             this.rtBoxLogger.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.rtBoxLogger.Name = "rtBoxLogger";
             this.rtBoxLogger.ReadOnly = true;
-            this.rtBoxLogger.TextChanged += new System.EventHandler(this.rtBoxLogger_TextChanged);
             // 
             // FormSingleServerLog
             // 
@@ -46,6 +45,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.rtBoxLogger);
             this.Name = "FormSingleServerLog";
+            this.Load += new System.EventHandler(this.FormSingleServerLog_Load);
             this.ResumeLayout(false);
 
         }

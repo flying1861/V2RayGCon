@@ -158,7 +158,6 @@ namespace V2RayGCon.Service
         void BindEventsTo(Controller.CoreServerCtrl server)
         {
             server.OnRequireKeepTrack += OnRequireKeepTrackHandler;
-            server.OnLog += OnSendLogHandler;
             server.OnPropertyChanged += ServerItemPropertyChangedHandler;
             server.OnRequireMenuUpdate += InvokeEventOnRequireMenuUpdate;
             server.OnRequireStatusBarUpdate += InvokeEventOnRequireStatusBarUpdate;
@@ -168,7 +167,6 @@ namespace V2RayGCon.Service
         void ReleaseEventsFrom(Controller.CoreServerCtrl server)
         {
             server.OnRequireKeepTrack -= OnRequireKeepTrackHandler;
-            server.OnLog -= OnSendLogHandler;
             server.OnPropertyChanged -= ServerItemPropertyChangedHandler;
             server.OnRequireMenuUpdate -= InvokeEventOnRequireMenuUpdate;
             server.OnRequireStatusBarUpdate -= InvokeEventOnRequireStatusBarUpdate;
@@ -546,11 +544,6 @@ namespace V2RayGCon.Service
                 OnRequireMenuUpdate?.Invoke(this, EventArgs.Empty);
             }
             catch { }
-        }
-
-        void OnSendLogHandler(object sender, VgcApis.Models.StrEvent arg)
-        {
-            setting.SendLog(arg.Data);
         }
 
         void ServerItemPropertyChangedHandler(object sender, EventArgs arg)

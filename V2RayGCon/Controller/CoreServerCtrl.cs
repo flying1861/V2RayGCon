@@ -103,25 +103,31 @@ namespace V2RayGCon.Controller
         ConcurrentQueue<string> _logCache = new ConcurrentQueue<string>();
 
         [JsonIgnore]
-        public string LogCache
+        int maxLogLines = Service.Setting.maxLogLines;
+
+        [JsonIgnore]
+        public string logCache
         {
             get
             {
-                return string.Join(Environment.NewLine, _logCache)
-                    + System.Environment.NewLine;
+                return string.Join(Environment.NewLine, _logCache);
+
             }
             private set
             {
-                // keep 200 lines of log
-                if (_logCache.Count > 300)
-                {
-                    var blackHole = "";
-                    for (var i = 0; i < 100; i++)
-                    {
-                        _logCache.TryDequeue(out blackHole);
-                    }
-                }
                 _logCache.Enqueue(value);
+
+                if (_logCache.Count < maxLogLines)
+                {
+                    return;
+                }
+
+                string blackHole;
+                var cut = maxLogLines / 2;
+                for (var i = 0; i < cut; i++)
+                {
+                    _logCache.TryDequeue(out blackHole);
+                }
             }
         }
         #endregion
@@ -793,16 +799,17 @@ namespace V2RayGCon.Controller
             OnLogHandler(this, new VgcApis.Models.StrEvent(message));
         }
 
+        public long logTimeStamp { get; private set; } = DateTime.Now.Ticks;
         void OnLogHandler(object sender, VgcApis.Models.StrEvent arg)
         {
             var msg = string.Format("[{0}] {1}", this.name, arg.Data);
-
-            LogCache = msg;
+            logCache = msg;
             try
             {
-                OnLog?.Invoke(this, new VgcApis.Models.StrEvent(msg));
+                setting.SendLog(msg);
             }
             catch { }
+            logTimeStamp = DateTime.Now.Ticks;
         }
 
         void InvokeEventOnRequireStatusBarUpdate()

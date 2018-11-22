@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows.Forms;
 
 namespace V2RayGCon.Views.WinForms
@@ -19,59 +18,70 @@ namespace V2RayGCon.Views.WinForms
         #endregion
 
         Service.Setting setting;
-        int maxNumberLines;
 
         FormLog()
         {
-            // for debug debug
-            // throw new System.ArgumentException("hello");
-
             setting = Service.Setting.Instance;
-            maxNumberLines = setting.maxLogLines;
 
             InitializeComponent();
 
             this.FormClosed += (s, e) =>
             {
-                setting.OnLog -= LogReceiver;
+                if (updateLogTimer != null)
+                {
+                    updateLogTimer.Stop();
+                    updateLogTimer.Tick -= UpdateLog;
+                    updateLogTimer.Dispose();
+                }
             };
 
             Lib.UI.SetFormLocation<FormLog>(this, Model.Data.Enum.FormLocations.BottomLeft);
-
             VgcApis.Libs.UI.AutoSetFormIcon(this);
             this.Show();
-
-            rtBoxLogger.Text = setting.logCache;
-
-            setting.OnLog += LogReceiver;
         }
 
-        void LogReceiver(object sender, VgcApis.Models.StrEvent e)
+        private void ScrollToBottom()
         {
-            Task.Factory.StartNew(() =>
-            {
-                var content = e.Data;
-                try
-                {
-                    rtBoxLogger.Invoke((MethodInvoker)delegate
-                    {
-                        if (rtBoxLogger.Lines.Length >= maxNumberLines - 1)
-                        {
-                            rtBoxLogger.Lines = rtBoxLogger.Lines.Skip(rtBoxLogger.Lines.Length - maxNumberLines).ToArray();
-                        }
-                        rtBoxLogger.AppendText(content + "\r\n");
-                    });
-                }
-                catch { }
-            });
-        }
-
-        private void rtBoxLogger_TextChanged(object sender, System.EventArgs e)
-        {
-            // set the current caret position to the end
             rtBoxLogger.SelectionStart = rtBoxLogger.Text.Length;
-            // scroll it automatically
             rtBoxLogger.ScrollToCaret();
+        }
+
+        Timer updateLogTimer = new Timer { Interval = 500 };
+        private void FormLog_Load(object sender, System.EventArgs e)
+        {
+
+            updateLogTimer.Tick += UpdateLog;
+            updateLogTimer.Start();
+        }
+
+        readonly object updateLogLocker = new object();
+        bool isUpdating = false;
+        long updateTimeStamp = DateTime.Now.Ticks;
+
+        void UpdateLog(object sender, EventArgs args)
+        {
+            lock (updateLogLocker)
+            {
+                if (isUpdating || updateTimeStamp == setting.logTimeStamp)
+                {
+                    return;
+                }
+                isUpdating = true;
+            }
+
+            try
+            {
+                updateTimeStamp = setting.logTimeStamp;
+                rtBoxLogger.Text = setting.logCache;
+                ScrollToBottom();
+            }
+            catch { }
+
+            lock (updateLogLocker)
+            {
+                isUpdating = false;
+            }
+
         }
     }
 }
