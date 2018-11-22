@@ -155,6 +155,10 @@ namespace ProxySetter.Controllers.VGCPluginComponents
             chkBasicAutoUpdateSysProxy.Checked = s.isAutoUpdateSysProxy;
             chkBasicPacAlwaysOn.Checked = s.isAlwaysStartPacServ;
             chkBasicUseCustomPac.Checked = s.isUseCustomPac;
+
+#if DISABLE_PAC_AUTO_MODE
+            chkBasicAutoUpdateSysProxy.Visible = false;
+#endif
         }
         #endregion
     }
