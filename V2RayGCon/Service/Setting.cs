@@ -44,12 +44,19 @@ namespace V2RayGCon.Service
             }
         }
 
+        public bool isEnableStatistics
+        {
+            get => userSettings.isEnableStat;
+            set
+            {
+                userSettings.isEnableStat = value;
+                LazySaveUserSettings();
+            }
+        }
+
         public bool isUseV4
         {
-            get
-            {
-                return userSettings.isUseV4Format;
-            }
+            get => userSettings.isUseV4Format;
             set
             {
                 userSettings.isUseV4Format = value;
@@ -536,6 +543,9 @@ namespace V2RayGCon.Service
             catch { }
 
             return FallBackLoadUserSettingsFromPorperties();
+
+            // After fall back func is deleted.
+            // return new Model.Data.UserSettings();
         }
 
         /// <summary>
@@ -554,7 +564,6 @@ namespace V2RayGCon.Service
                 var result = new Model.Data.UserSettings
                 {
                     // int
-                    MaxLogLine = p.MaxLogLine,
                     ServerPanelPageSize = p.ServerPanelPageSize,
 
                     // bool

@@ -142,6 +142,22 @@ namespace V2RayGCon.Model.Data
                     { "none","dsock" },
                 },
             } },
+
+            // quic
+            { 5, new StreamComponent{
+                dropDownStyle=true,
+                name="QUIC",
+                network="quic",
+                optionPath="quicSettings.header.type",
+                options=new Dictionary<string,string>{
+                    { "none", "quic"},
+                    { "srtp", "quic_srtp" },
+                    { "utp", "quic_utp"},
+                    { "wechat-video", "quic_wechat-video" },
+                    { "dtls", "quic_dtls"},
+                    { "wireguard", "quic_wireguard"},
+                },
+            } },
         };
 
         // editor examples

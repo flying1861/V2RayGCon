@@ -20,7 +20,6 @@ namespace V2RayGCon.Controller
         [JsonIgnore]
         Service.Setting setting;
 
-        public event EventHandler<VgcApis.Models.StrEvent> OnLog;
         public event EventHandler
             OnPropertyChanged,
             OnRequireStatusBarUpdate,
@@ -77,6 +76,7 @@ namespace V2RayGCon.Controller
             server = new Service.Core(setting);
             server.OnLog += OnLogHandler;
             server.OnCoreStatusChanged += OnCoreStateChangedHandler;
+            statsSamplingTimer.Elapsed += TakeStatsSample;
         }
 
         #region properties
@@ -84,6 +84,19 @@ namespace V2RayGCon.Controller
         #endregion
 
         #region non-serialize properties
+        [JsonIgnore]
+        ConcurrentQueue<VgcApis.Models.StatsSample> statsSamples =
+            new ConcurrentQueue<VgcApis.Models.StatsSample>();
+
+        [JsonIgnore]
+        System.Timers.Timer statsSamplingTimer = new System.Timers.Timer
+        {
+            Interval = 2000
+        };
+
+        [JsonIgnore]
+        int statsPort { get; set; }
+
         [JsonIgnore]
         public long speedTestResult;
 
@@ -103,7 +116,7 @@ namespace V2RayGCon.Controller
         ConcurrentQueue<string> _logCache = new ConcurrentQueue<string>();
 
         [JsonIgnore]
-        int maxLogLines = Service.Setting.maxLogLines;
+        readonly int maxLogLines = Service.Setting.maxLogLines;
 
         [JsonIgnore]
         public string logCache
@@ -133,6 +146,8 @@ namespace V2RayGCon.Controller
         #endregion
 
         #region ICoreCtrl interface
+        public ConcurrentQueue<VgcApis.Models.StatsSample> GetSampleData()
+            => this.statsSamples;
         public string GetName() => this.name;
         public string GetStatus() => this.status;
         public string GetConfig() => this.config;
@@ -259,8 +274,10 @@ namespace V2RayGCon.Controller
             log(text);
             SendLog(url);
 
-            var speedTester = new Service.Core(setting);
-            speedTester.title = GetTitle();
+            var speedTester = new Service.Core(setting)
+            {
+                title = GetTitle()
+            };
             speedTester.OnLog += OnLogHandler;
             speedTester.RestartCore(config);
 
@@ -370,6 +387,10 @@ namespace V2RayGCon.Controller
 
         public void CleanupThen(Action next)
         {
+            statsSamplingTimer.Enabled = false;
+            statsSamplingTimer.Elapsed -= TakeStatsSample;
+            statsSamplingTimer.Close();
+
             this.server.StopCoreThen(() =>
             {
                 this.server.OnLog -= OnLogHandler;
@@ -506,6 +527,39 @@ namespace V2RayGCon.Controller
         #endregion
 
         #region private method
+        readonly object takeStatsSampleLock = new object();
+        bool isTakingSample = false;
+        void TakeStatsSample(object sender, EventArgs args)
+        {
+            lock (takeStatsSampleLock)
+            {
+                if (isTakingSample)
+                {
+                    return;
+                }
+                isTakingSample = true;
+            }
+
+            var up = this.server.QueryStatsApi(this.statsPort, true);
+            var down = this.server.QueryStatsApi(this.statsPort, false);
+            this.statsSamples.Enqueue(new VgcApis.Models.StatsSample(up, down));
+            TrimStatsSamples();
+            isTakingSample = false;
+        }
+
+        void TrimStatsSamples()
+        {
+            if (statsSamples.Count < 100)
+            {
+                return;
+            }
+            VgcApis.Models.StatsSample blackHole;
+            while (statsSamples.Count >= 5)
+            {
+                statsSamples.TryDequeue(out blackHole);
+            }
+        }
+
         string InjectGlobalImport(string config, bool isIncludeSpeedTest, bool isIncludeActivate)
         {
             JObject import = Lib.Utils.ImportItemList2JObject(
@@ -587,7 +641,7 @@ namespace V2RayGCon.Controller
             return table[Lib.Utils.Clamp(typeNumber, 0, table.Length)];
         }
 
-        bool IsProtocolMatchProxyRequirment(bool isGlobalProxy, string protocol)
+        static bool IsProtocolMatchProxyRequirment(bool isGlobalProxy, string protocol)
         {
             if (isGlobalProxy && protocol != "http")
             {
@@ -622,6 +676,10 @@ namespace V2RayGCon.Controller
             }
 
             InjectSkipCnSiteSettingsIntoConfig(ref cfg);
+            InjectStatsSettingsIntoConfig(ref cfg);
+
+            // debug
+            var configStr = cfg.ToString(Formatting.Indented);
 
             server.title = GetTitle();
             server.RestartCoreThen(
@@ -633,6 +691,34 @@ namespace V2RayGCon.Controller
                     next?.Invoke();
                 },
                 Lib.Utils.GetEnvVarsFromConfig(cfg));
+        }
+
+        void StartStatsSampling()
+        {
+            statsSamples = new ConcurrentQueue<VgcApis.Models.StatsSample>();
+            statsSamplingTimer.Enabled = true;
+        }
+
+        void StopStatsSampling()
+        {
+            statsSamplingTimer.Enabled = false;
+        }
+
+        void InjectStatsSettingsIntoConfig(ref JObject config)
+        {
+            if (!setting.isEnableStatistics)
+            {
+                return;
+            }
+            statsPort = Lib.Utils.GetFreeTcpPort();
+            var result = cache.tpl.LoadTemplate("statsApiV4Inb") as JObject;
+            result["inbounds"][0]["port"] = statsPort;
+            Lib.Utils.CombineConfig(ref result, config);
+            result["inbounds"][0]["tag"] = "agentin";
+
+            var statsTpl = cache.tpl.LoadTemplate("statsApiV4Tpl") as JObject;
+            Lib.Utils.CombineConfig(ref result, statsTpl);
+            config = result;
         }
 
         void InjectSkipCnSiteSettingsIntoConfig(ref JObject config)
@@ -794,22 +880,21 @@ namespace V2RayGCon.Controller
             return o;
         }
 
+        public long logTimeStamp { get; private set; } = DateTime.Now.Ticks;
         void SendLog(string message)
         {
-            OnLogHandler(this, new VgcApis.Models.StrEvent(message));
-        }
-
-        public long logTimeStamp { get; private set; } = DateTime.Now.Ticks;
-        void OnLogHandler(object sender, VgcApis.Models.StrEvent arg)
-        {
-            var msg = string.Format("[{0}] {1}", this.name, arg.Data);
-            logCache = msg;
+            logCache = message;
             try
             {
-                setting.SendLog(msg);
+                setting.SendLog($"[{this.name}] {message}");
             }
             catch { }
             logTimeStamp = DateTime.Now.Ticks;
+        }
+
+        void OnLogHandler(object sender, VgcApis.Models.StrEvent arg)
+        {
+            SendLog(arg.Data);
         }
 
         void InvokeEventOnRequireStatusBarUpdate()
@@ -831,6 +916,17 @@ namespace V2RayGCon.Controller
         void OnCoreStateChangedHandler(object sender, EventArgs args)
         {
             isServerOn = server.isRunning;
+            if (setting.isEnableStatistics)
+            {
+                if (server.isRunning)
+                {
+                    StartStatsSampling();
+                }
+                else
+                {
+                    StopStatsSampling();
+                }
+            }
             InvokeEventOnPropertyChange();
         }
 

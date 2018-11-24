@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VgcApisTests", "VgcApisTest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "V2RayGConTests", "V2RayGConTests\V2RayGConTests.csproj", "{AF050080-15FD-4196-9466-89113DED54DC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Statistics", "Plugins\Statistics\Statistics.csproj", "{B75A3390-B84B-43B0-9507-483AC7E1BE38}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatisticsTests", "Plugins\StatisticsTests\StatisticsTests.csproj", "{ACCC94CA-5284-48AF-B232-E9B6A0FBE571}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +95,22 @@ Global
 		{AF050080-15FD-4196-9466-89113DED54DC}.DisableProxySetter|Any CPU.Build.0 = DisableProxySetter|Any CPU
 		{AF050080-15FD-4196-9466-89113DED54DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF050080-15FD-4196-9466-89113DED54DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B75A3390-B84B-43B0-9507-483AC7E1BE38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B75A3390-B84B-43B0-9507-483AC7E1BE38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B75A3390-B84B-43B0-9507-483AC7E1BE38}.DisablePacAutoMode|Any CPU.ActiveCfg = Debug|Any CPU
+		{B75A3390-B84B-43B0-9507-483AC7E1BE38}.DisablePacAutoMode|Any CPU.Build.0 = Debug|Any CPU
+		{B75A3390-B84B-43B0-9507-483AC7E1BE38}.DisableProxySetter|Any CPU.ActiveCfg = Debug|Any CPU
+		{B75A3390-B84B-43B0-9507-483AC7E1BE38}.DisableProxySetter|Any CPU.Build.0 = Debug|Any CPU
+		{B75A3390-B84B-43B0-9507-483AC7E1BE38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B75A3390-B84B-43B0-9507-483AC7E1BE38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACCC94CA-5284-48AF-B232-E9B6A0FBE571}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACCC94CA-5284-48AF-B232-E9B6A0FBE571}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACCC94CA-5284-48AF-B232-E9B6A0FBE571}.DisablePacAutoMode|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACCC94CA-5284-48AF-B232-E9B6A0FBE571}.DisablePacAutoMode|Any CPU.Build.0 = Debug|Any CPU
+		{ACCC94CA-5284-48AF-B232-E9B6A0FBE571}.DisableProxySetter|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACCC94CA-5284-48AF-B232-E9B6A0FBE571}.DisableProxySetter|Any CPU.Build.0 = Debug|Any CPU
+		{ACCC94CA-5284-48AF-B232-E9B6A0FBE571}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACCC94CA-5284-48AF-B232-E9B6A0FBE571}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -180,32 +180,30 @@ namespace V2RayGCon.Resource.Resx {
         
         /// <summary>
         ///   查找类似 {
-        ///  &quot;inbSimSock&quot;: {
-        ///    &quot;tag&quot;: &quot;agentin&quot;,
-        ///    &quot;port&quot;: 1080,
-        ///    &quot;listen&quot;: &quot;127.0.0.1&quot;,
-        ///    &quot;protocol&quot;: &quot;socks&quot;,
-        ///    &quot;settings&quot;: {}
-        ///  },
-        ///  &quot;outbVmess&quot;: {
-        ///    &quot;protocol&quot;: &quot;vmess&quot;,
-        ///    &quot;settings&quot;: {
-        ///      &quot;vnext&quot;: [
-        ///        {
-        ///          &quot;address&quot;: &quot;&quot;,
-        ///          &quot;port&quot;: 1234,
-        ///          &quot;users&quot;: [
-        ///            {
-        ///              &quot;id&quot;: &quot;&quot;,
-        ///              &quot;alterId&quot;: 32,
-        ///              &quot;security&quot;: &quot;auto&quot;
-        ///            }
-        ///          ]
+        ///  &quot;statsApiV4&quot;: {
+        ///    &quot;inbounds&quot;: [
+        ///      {
+        ///        &quot;listen&quot;: &quot;127.0.0.1&quot;,
+        ///        &quot;port&quot;: 1090,
+        ///        &quot;protocol&quot;: &quot;dokodemo-door&quot;,
+        ///        &quot;settings&quot;: {
+        ///          &quot;address&quot;: &quot;127.0.0.1&quot;
+        ///        },
+        ///        &quot;tag&quot;: &quot;StatsApiInb&quot;
+        ///      }
+        ///    ],
+        ///    &quot;policy&quot;: {
+        ///      &quot;levels&quot;: {
+        ///        &quot;0&quot;: {
+        ///          &quot;statsUserUplink&quot;: true,
+        ///          &quot;statsUserDownlink&quot;: true
         ///        }
-        ///      ]
-        ///    },
-        ///    &quot;tag&quot;: &quot;agentout&quot;,
-        ///    &quot;streamSettings [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///      },
+        ///      &quot;system&quot;: {
+        ///        &quot;statsInboundUplink&quot;: true,
+        ///        &quot;statsInboundDownlink&quot;: true
+        ///      }
+        ///     [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string config_tpl {
             get {
@@ -259,11 +257,20 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
+        ///   查找类似 v2ctl.exe 的本地化字符串。
+        /// </summary>
+        internal static string ExecutableV2ctl {
+            get {
+                return ResourceManager.GetString("ExecutableV2ctl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 v2ray.exe 的本地化字符串。
         /// </summary>
-        internal static string Executable {
+        internal static string ExecutableV2ray {
             get {
-                return ResourceManager.GetString("Executable", resourceCulture);
+                return ResourceManager.GetString("ExecutableV2ray", resourceCulture);
             }
         }
         
@@ -489,6 +496,15 @@ namespace V2RayGCon.Resource.Resx {
         internal static string SpeedTestUrl {
             get {
                 return ResourceManager.GetString("SpeedTestUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 api --server=&quot;127.0.0.1:{0}&quot; StatsService.GetStats &quot;name: &quot;&quot;&quot;&quot;inbound&gt;&gt;&gt;agentin&gt;&gt;&gt;traffic&gt;&gt;&gt;{1}&quot;&quot;&quot;&quot; reset: false&quot; 的本地化字符串。
+        /// </summary>
+        internal static string StatsQueryParamTpl {
+            get {
+                return ResourceManager.GetString("StatsQueryParamTpl", resourceCulture);
             }
         }
         

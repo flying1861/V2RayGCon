@@ -70,6 +70,8 @@ namespace VgcApis.Libs
         }
         #endregion
 
+
+        #region Misc
         public static bool CopyToClipboard(string content)
         {
             try
@@ -120,5 +122,6 @@ namespace VgcApis.Libs
             };
             return 0;
         }
+        #endregion
     }
 }

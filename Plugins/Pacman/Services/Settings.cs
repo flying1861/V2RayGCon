@@ -1,5 +1,4 @@
 ﻿using Pacman.Resources.Langs;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -27,17 +26,15 @@ namespace Pacman.Services
         #endregion
 
         #region public methods
-        public void Pack(
+        public string Pack(
             List<VgcApis.Models.ICoreCtrl> servList,
             string orgServerUid,
-            string packageName,
-            Action<string> finish)
+            string packageName)
         {
-            vgcServers.PackServersIntoV4Package(
+            return vgcServers.PackServersIntoV4Package(
                 servList,
                 orgServerUid,
-                packageName,
-                finish);
+                packageName);
         }
 
         public ReadOnlyCollection<VgcApis.Models.ICoreCtrl>

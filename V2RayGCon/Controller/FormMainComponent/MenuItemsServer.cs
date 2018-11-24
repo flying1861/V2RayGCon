@@ -97,7 +97,7 @@ namespace V2RayGCon.Controller.FormMainComponent
 
                 if (setting.isUseV4)
                 {
-                    servers.PackServersIntoV4Package(list, null, null, null);
+                    servers.PackServersIntoV4Package(list, null, null);
                 }
                 else
                 {

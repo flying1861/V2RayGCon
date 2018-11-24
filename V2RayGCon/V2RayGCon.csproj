@@ -486,6 +486,10 @@
       <Project>{8ddda069-8b11-4b48-93c1-c608bff0c361}</Project>
       <Name>ProxySetter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Plugins\Statistics\Statistics.csproj">
+      <Project>{b75a3390-b84b-43b0-9507-483ac7e1be38}</Project>
+      <Name>Statistics</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VgcApis\VgcApis.csproj">
       <Project>{b3cf9873-afbc-4703-8a3b-06d39fd761b9}</Project>
       <Name>VgcApis</Name>
@@ -494,7 +498,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>set "libsDir=libs\"
-set "fileList=Pacman ProxySetter DotNetZip Newtonsoft ScintillaNET VgcApis zxing"
+set "fileList=Statistics Pacman ProxySetter DotNetZip Newtonsoft ScintillaNET VgcApis zxing"
 
 call:CreateFolderOnDemand "%25libsDir%25"
 call:MoveFilesByList "%25fileList%25"

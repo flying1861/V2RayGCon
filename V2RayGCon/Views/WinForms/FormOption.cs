@@ -79,7 +79,8 @@ namespace V2RayGCon.Views.WinForms
                     cboxSettingPageSize,
                     chkSetServAutotrack,
                     chkSetSysPortable,
-                    chkSetUseV4));
+                    chkSetUseV4,
+                    chkSetServStatistics));
 
             return ctrl;
         }

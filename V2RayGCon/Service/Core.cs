@@ -36,6 +36,19 @@ namespace V2RayGCon.Service
         }
 
         #region property
+        string _v2ctl = "";
+        string v2ctl
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_v2ctl))
+                {
+                    _v2ctl = GetExecutablePath(StrConst.ExecutableV2ctl);
+                }
+                return _v2ctl;
+            }
+        }
+
         string _title;
         public string title
         {
@@ -65,6 +78,54 @@ namespace V2RayGCon.Service
         #endregion
 
         #region public method
+        public int QueryStatsApi(int port, bool isUplink)
+        {
+            if (string.IsNullOrEmpty(v2ctl))
+            {
+                return 0;
+            }
+
+            var queryParam = string.Format(
+                StrConst.StatsQueryParamTpl,
+                port.ToString(),
+                isUplink ? "uplink" : "downlink");
+
+            var p = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = v2ctl,
+                    Arguments = queryParam,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true,
+                }
+            };
+
+            // since 3.46.* v is deleted
+            // value:
+            Regex pattern = new Regex(@"(?<value>(\d+))");
+            string value = "0";
+
+            try
+            {
+                p.Start();
+                while (!p.StandardOutput.EndOfStream)
+                {
+                    var output = p.StandardOutput.ReadLine();
+                    Match match = pattern.Match(output);
+                    if (match.Success)
+                    {
+                        value = match.Groups["value"].Value;
+                    }
+                }
+                p.WaitForExit();
+            }
+            catch { }
+
+            return Lib.Utils.Str2Int(value);
+        }
+
         public string GetCoreVersion()
         {
             var ver = string.Empty;
@@ -113,12 +174,12 @@ namespace V2RayGCon.Service
             return !string.IsNullOrEmpty(GetExecutablePath());
         }
 
-        public string GetExecutablePath()
+        public string GetExecutablePath(string fileName = null)
         {
             List<string> folders = GenV2RayCoreSearchPaths(setting.isPortable);
             for (var i = 0; i < folders.Count; i++)
             {
-                var file = Path.Combine(folders[i], StrConst.Executable);
+                var file = Path.Combine(folders[i], fileName ?? StrConst.ExecutableV2ray);
                 if (File.Exists(file))
                 {
                     return file;

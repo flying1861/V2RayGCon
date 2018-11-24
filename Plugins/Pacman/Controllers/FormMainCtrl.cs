@@ -235,18 +235,12 @@ namespace Pacman.Controllers
                 .GetPackageList()
                 .FirstOrDefault(p => p.name == tboxName.Text);
 
-            Action<string> finish = null;
-            string oldUid = null;
+            var newUid = settings.Pack(list, package?.uid, tboxName.Text);
             if (package != null)
             {
-                oldUid = package.uid;
-                finish = (newUid) =>
-                {
-                    package.uid = newUid;
-                    settings.SavePackage(package);
-                };
+                package.uid = newUid;
+                settings.SavePackage(package);
             }
-            settings.Pack(list, oldUid, tboxName.Text, finish);
         }
 
         List<Models.Data.Bean> GetFlyContentBeanList()

@@ -11,7 +11,6 @@ namespace V2RayGCon.Views.WinForms
         List<int> result;
         int curResult, keywordLength;
 
-
         public FormSearch(Scintilla editor)
         {
             InitializeComponent();

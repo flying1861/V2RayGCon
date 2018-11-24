@@ -3,8 +3,9 @@
     class UserSettings
     {
         #region public properties
-        public int MaxLogLine { get; set; }
         public int ServerPanelPageSize { get; set; }
+
+        public bool isEnableStat { get; set; } = false;
 
         public bool isUseV4Format { get; set; }
         public bool CfgShowToolPanel { get; set; }
@@ -27,7 +28,6 @@
 
         public UserSettings()
         {
-            MaxLogLine = 1000;
             ServerPanelPageSize = 99;
 
             isUseV4Format = false;

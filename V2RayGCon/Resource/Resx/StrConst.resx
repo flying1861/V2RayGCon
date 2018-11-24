@@ -130,7 +130,7 @@
   <data name="DefCoreVersion" xml:space="preserve">
     <value>v3.26</value>
   </data>
-  <data name="Executable" xml:space="preserve">
+  <data name="ExecutableV2ray" xml:space="preserve">
     <value>v2ray.exe</value>
   </data>
   <data name="config_tpl" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -251,5 +251,11 @@
   <data name="V2RayCoreFolder" xml:space="preserve">
     <value>core</value>
     <comment>V2RayGCon\core\v2ray.exe</comment>
+  </data>
+  <data name="ExecutableV2ctl" xml:space="preserve">
+    <value>v2ctl.exe</value>
+  </data>
+  <data name="StatsQueryParamTpl" xml:space="preserve">
+    <value>api --server="127.0.0.1:{0}" StatsService.GetStats "name: """"inbound&gt;&gt;&gt;agentin&gt;&gt;&gt;traffic&gt;&gt;&gt;{1}"""" reset: false"</value>
   </data>
 </root>

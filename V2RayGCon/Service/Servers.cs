@@ -93,29 +93,60 @@ namespace V2RayGCon.Service
         #endregion
 
         #region private method
-        private void SavePackageV4IntoFormMain(
-            string newConfig,
-            string orgServerUid,
-            Action<string> finish)
+        private string ImportPackageV4Config(string orgUid, JObject package)
         {
-            var orgServ = serverList.FirstOrDefault(s => s.GetUid() == orgServerUid);
+            var newConfig = package.ToString(Formatting.None);
+            var servUid = "";
+
+            var orgServ = serverList.FirstOrDefault(s => s.GetUid() == orgUid);
             if (orgServ != null)
             {
                 ReplaceServerConfig(orgServ.config, newConfig);
+                servUid = orgUid;
             }
             else
             {
                 AddServer(newConfig, "PackageV4");
-            }
-            var newServ = serverList.FirstOrDefault(s => s.config == newConfig);
-            if (newServ != null)
-            {
-                try
+                var newServ = serverList.FirstOrDefault(s => s.config == newConfig);
+                if (newServ != null)
                 {
-                    finish?.Invoke(newServ.GetUid());
+                    servUid = newServ.GetUid();
                 }
-                catch { }
             }
+
+            return servUid;
+        }
+
+        private JObject GenPackageV4Config(List<VgcApis.Models.ICoreCtrl> servList, string packageName)
+        {
+            var package = cache.tpl.LoadPackage("pkgV4Tpl");
+            package["v2raygcon"]["alias"] = string.IsNullOrEmpty(packageName) ? "PackageV4" : packageName;
+            var outbounds = package["outbounds"] as JArray;
+            var description = "";
+
+            for (var i = 0; i < servList.Count; i++)
+            {
+                var s = servList[i];
+                var parts = Lib.Utils.ExtractOutboundsFromConfig(s.GetConfig());
+                var c = 0;
+                foreach (JObject p in parts)
+                {
+                    p["tag"] = $"agentout{i}s{c++}";
+                    outbounds.Add(p);
+                }
+                var name = s.GetName();
+                if (c == 0)
+                {
+                    setting.SendLog(I18N.PackageFail + ": " + name);
+                }
+                else
+                {
+                    description += $" {i}.[{name}]";
+                    setting.SendLog(I18N.PackageSuccess + ": " + name);
+                }
+            }
+            package["v2raygcon"]["description"] = description;
+            return package;
         }
 
         void DisposeLazyTimers()
@@ -920,64 +951,25 @@ namespace V2RayGCon.Service
         /// </summary>
         /// <param name="packageName"></param>
         /// <param name="servList"></param>
-        public void PackServersIntoV4Package(
+        public string PackServersIntoV4Package(
             List<VgcApis.Models.ICoreCtrl> servList,
-            string orgServerUid,
-            string packageName,
-            Action<string> finish)
+            string orgUid,
+            string packageName)
         {
             if (servList == null || servList.Count <= 0)
             {
                 VgcApis.Libs.UI.MsgBoxAsync(null, I18N.ListIsEmpty);
-                return;
+                return "";
             }
 
-            var packages = cache.tpl.LoadPackage("pkgV4Tpl");
-            var serverNameList = new List<string>();
-            var count = 0;
+            JObject package = GenPackageV4Config(servList, packageName);
+            string newUid = ImportPackageV4Config(orgUid, package);
 
-            void done()
-            {
-                packages["v2raygcon"]["alias"] = string.IsNullOrEmpty(packageName) ? "PackageV4" : packageName;
-                packages["v2raygcon"]["description"] = string.Join(" ", serverNameList);
+            UpdateMarkList();
+            setting.SendLog(I18N.PackageDone);
+            Lib.UI.ShowMessageBoxDoneAsync();
 
-                var newConfig = packages.ToString(Formatting.None);
-                SavePackageV4IntoFormMain(newConfig, orgServerUid, finish);
-
-                UpdateMarkList();
-                setting.SendLog(I18N.PackageDone);
-                Lib.UI.ShowMessageBoxDoneAsync();
-            }
-
-            void worker(int index, Action next)
-            {
-                var server = servList[index];
-                var outbounds = Lib.Utils.ExtractOutboundsFromConfig(server.GetConfig());
-                var num = count;
-                foreach (JObject item in outbounds)
-                {
-                    item["tag"] = string.Format("agentout{0}t{1}", index, count.ToString());
-                    count++;
-                    (packages["outbounds"] as JArray).Add(item);
-                }
-                if (count == num)
-                {
-                    setting.SendLog(I18N.PackageFail + ": " + server.GetName());
-                }
-                else
-                {
-                    serverNameList.Add(
-                        string.Format(
-                            "{0}.[{1}]",
-                            index,
-                            server.GetName()));
-
-                    setting.SendLog(I18N.PackageSuccess + ": " + server.GetName());
-                }
-                next();
-            }
-
-            Lib.Utils.ChainActionHelperAsync(servList.Count, worker, done);
+            return newUid;
         }
 
         public void PackServersIntoV3Package(

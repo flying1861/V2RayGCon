@@ -1,7 +1,10 @@
-﻿namespace VgcApis.Models
+﻿using System.Collections.Concurrent;
+
+namespace VgcApis.Models
 {
     public interface ICoreCtrl
     {
+        ConcurrentQueue<VgcApis.Models.StatsSample> GetSampleData();
         string GetStatus();
         string GetTitle();
         string GetUid();

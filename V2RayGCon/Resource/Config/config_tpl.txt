@@ -1,4 +1,49 @@
 ﻿{
+  "statsApiV4Inb": {
+    "inbounds": [
+      {
+        "listen": "127.0.0.1",
+        "port": 1090,
+        "protocol": "dokodemo-door",
+        "settings": {
+          "address": "127.0.0.1"
+        },
+        "tag": "StatsApiInb"
+      }
+    ]
+  },
+  "statsApiV4Tpl": {
+    "policy": {
+      "levels": {
+        "0": {
+          "statsUserUplink": true,
+          "statsUserDownlink": true
+        }
+      },
+      "system": {
+        "statsInboundUplink": true,
+        "statsInboundDownlink": true
+      }
+    },
+    "stats": {},
+    "api": {
+      "tag": "StatsApiOut",
+      "services": [
+        "StatsService"
+      ]
+    },
+    "routing": {
+      "rules": [
+        {
+          "type": "field",
+          "inboundTag": [
+            "StatsApiInb"
+          ],
+          "outboundTag": "StatsApiOut"
+        }
+      ]
+    }
+  },
   "inbSimSock": {
     "tag": "agentin",
     "port": 1080,
@@ -197,6 +242,72 @@
   },
   "tls": {
     "allowInsecure": false
+  },
+  "quic": {
+    "network": "quic",
+    "security": "",
+    "quicSettings": {
+      "security": "none",
+      "key": "",
+      "header": {
+        "type": "none"
+      }
+    }
+  },
+  "quic_srtp": {
+    "network": "quic",
+    "security": "",
+    "quicSettings": {
+      "security": "none",
+      "key": "",
+      "header": {
+        "type": "srtp"
+      }
+    }
+  },
+  "quic_utp": {
+    "network": "quic",
+    "security": "",
+    "quicSettings": {
+      "security": "none",
+      "key": "",
+      "header": {
+        "type": "utp"
+      }
+    }
+  },
+  "quic_wechat-video": {
+    "network": "quic",
+    "security": "",
+    "quicSettings": {
+      "security": "none",
+      "key": "",
+      "header": {
+        "type": "wechat-video"
+      }
+    }
+  },
+  "quic_dtls": {
+    "network": "quic",
+    "security": "",
+    "quicSettings": {
+      "security": "none",
+      "key": "",
+      "header": {
+        "type": "dtls"
+      }
+    }
+  },
+  "quic_wireguard": {
+    "network": "quic",
+    "security": "",
+    "quicSettings": {
+      "security": "none",
+      "key": "",
+      "header": {
+        "type": "wireguard"
+      }
+    }
   },
   "kcp": {
     "network": "kcp",

@@ -28,7 +28,7 @@ namespace V2RayGCon.Views.WinForms
 
             VgcApis.Libs.UI.AutoSetFormIcon(this);
             this.Show();
-            this.Text = I18N.Log + " - " + serverItem.summary;
+            this.Text = I18N.Log + " - " + serverItem.GetTitle();
         }
 
         private void FormSingleServerLog_Load(object sender, System.EventArgs e)
