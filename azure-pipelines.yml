@@ -114,7 +114,7 @@ steps:
     archiveFile: '$(Build.ArtifactStagingDirectory)/V2RayGCon-box.zip' 
     replaceExistingArchive: true 
 
-- script: 'for %%a in (*.zip) do certutil -hashfile %%a MD5 >> md5.txt'
+- script: 'for %%a in (*.zip) do certutil -hashfile %%a MD5 >> md5.txt & echo. >> md5.txt'
   workingDirectory: '$(Build.ArtifactStagingDirectory)'
   displayName: 'Calc md5 for releases.' 
   # failOnStderr: #
