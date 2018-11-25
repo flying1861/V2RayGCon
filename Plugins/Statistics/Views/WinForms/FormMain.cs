@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Statistics.Views.WinForms
@@ -10,6 +10,9 @@ namespace Statistics.Views.WinForms
     public partial class FormMain : Form
     {
         VgcApis.Models.IServersService vgcServers;
+        Dictionary<string, VgcApis.Models.StatsSample> preSamples
+            = new Dictionary<string, VgcApis.Models.StatsSample>();
+
         public FormMain(VgcApis.Models.IServersService vgcServers)
         {
             this.vgcServers = vgcServers;
@@ -20,7 +23,7 @@ namespace Statistics.Views.WinForms
 
         private void FormMain_Shown(object sender, EventArgs e)
         {
-            this.Text = Properties.Resources.Name + " - v" + Properties.Resources.Version;
+            this.Text = Properties.Resources.Name + " v" + Properties.Resources.Version;
             updateStatsTableTimer.Tick += UpdateStatsTable;
             updateStatsTableTimer.Start();
         }
@@ -29,9 +32,23 @@ namespace Statistics.Views.WinForms
         #endregion
 
         #region private methods
+        VgcApis.Models.StatsSample GetPreSample(string name)
+        {
+            if (preSamples.ContainsKey(name))
+            {
+                return preSamples[name];
+            }
+            return null;
+        }
+
+        void UpdateStatsTable(object sender, EventArgs args)
+        {
+            Task.Factory.StartNew(UpdateStatsTableWorker);
+        }
+
         readonly object updateStatsTableLocker = new object();
         bool isUpdating = false;
-        void UpdateStatsTable(object sender, EventArgs args)
+        void UpdateStatsTableWorker()
         {
             lock (updateStatsTableLocker)
             {
@@ -42,46 +59,69 @@ namespace Statistics.Views.WinForms
                 isUpdating = true;
             }
 
-            var serverList = vgcServers
+            var contents = vgcServers
                 .GetAllServersList()
-                .Where(s => s.GetSampleData().Count > 0)
+                .Where(s => s.IsCoreRunning())
+                .Select(s => GetterCoreInfo(s))
                 .ToList();
 
-            ShowSampleData(serverList);
+            RefreshListViewControl(contents);
+
             isUpdating = false;
         }
 
-        void ShowSampleData(List<VgcApis.Models.ICoreCtrl> servList)
+        private void RefreshListViewControl(List<string[]> contents)
         {
-            lvStatsTable.Items.Clear();
-            foreach (var ctrl in servList)
+            lvStatsTable.Invoke((MethodInvoker)delegate
             {
-                lvStatsTable.Items.Add(new ListViewItem(Core2Line(ctrl)));
-            }
+                lvStatsTable.BeginUpdate();
+                try
+                {
+                    lvStatsTable.Items.Clear();
+                    foreach (var content in contents)
+                    {
+                        lvStatsTable.Items.Add(
+                            new ListViewItem(content));
+                    }
+                }
+                finally
+                {
+                    lvStatsTable.EndUpdate();
+                }
+            });
         }
 
         string[] GetTotalFromSampleDatas(
-            ConcurrentQueue<VgcApis.Models.StatsSample> data)
+            string name,
+            VgcApis.Models.StatsSample data)
         {
-            if (data == null || data.Count <= 0)
+            var empty = new string[] { "0", "0", "0", "0", "0" };
+            if (data == null)
             {
-                return new string[] { "0", "0", "0", "0", "0" };
+                return empty;
             }
 
-            var q = data.ToList();
-            var count = q.Count;
-            var first = q[count - 1];
-            var middle = q[Math.Max(0, count - 4)];
+            var preData = GetPreSample(name);
 
-            var cur = CalcSpeed(middle, first);
-            int d = first.statsDownlink / 1024 / 1024;
-            int u = first.statsUplink / 1024 / 1024;
+            if (preData == null)
+            {
+                preSamples[name] = data;
+                return empty;
+            }
+
+            const int MiB = 1024 * 1024;
+            var td = Math.Max(0, data.statsDownlink / MiB);
+            var tu = Math.Max(0, data.statsUplink / MiB);
+
+            var speed = CalcSpeed(preData, data);
+            preSamples[name] = data;
+
             return new string[] {
                 "", // reserved for name
-                cur[0],
-                cur[1],
-                d.ToString(),
-                u.ToString() };
+                speed[0],
+                speed[1],
+                td.ToString(),
+                tu.ToString() };
         }
 
         string[] CalcSpeed(
@@ -97,15 +137,16 @@ namespace Statistics.Views.WinForms
             var d = 1.0 * (end.statsDownlink - start.statsDownlink) / time / 1024;
             var u = 1.0 * (end.statsUplink - start.statsUplink) / time / 1024;
             return new string[] {
-                ((int)d).ToString(),
-                ((int)u).ToString(),
+                (Math.Max(0,(int)d)).ToString(),
+                (Math.Max(0,(int)u)).ToString(),
             };
         }
 
-        string[] Core2Line(VgcApis.Models.ICoreCtrl coreCtrl)
+        string[] GetterCoreInfo(VgcApis.Models.ICoreCtrl coreCtrl)
         {
-            var data = coreCtrl.GetSampleData();
-            var result = GetTotalFromSampleDatas(data);
+            var curData = coreCtrl.Peek();
+            var name = coreCtrl.GetName();
+            var result = GetTotalFromSampleDatas(name, curData);
             result[0] = coreCtrl.GetName();
             return result;
         }

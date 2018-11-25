@@ -14,7 +14,7 @@ namespace Pacman.Views.WinForms
             InitializeComponent();
 
             VgcApis.Libs.UI.AutoSetFormIcon(this);
-            this.Text = Properties.Resources.Name + " - " + Properties.Resources.Version;
+            this.Text = Properties.Resources.Name + " v" + Properties.Resources.Version;
         }
 
         private void FormMain_Shown(object sender, EventArgs e)

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.panel1 = new System.Windows.Forms.Panel();
             this.lvStatsTable = new System.Windows.Forms.ListView();
             this.lvName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -40,64 +41,51 @@
             // 
             // panel1
             // 
+            resources.ApplyResources(this.panel1, "panel1");
             this.panel1.Controls.Add(this.lvStatsTable);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(800, 450);
-            this.panel1.TabIndex = 0;
             // 
             // lvStatsTable
             // 
+            resources.ApplyResources(this.lvStatsTable, "lvStatsTable");
             this.lvStatsTable.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.lvName,
             this.lvCurDown,
             this.lvCurUp,
             this.lvTotalDown,
             this.lvTotalUp});
-            this.lvStatsTable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvStatsTable.GridLines = true;
-            this.lvStatsTable.Location = new System.Drawing.Point(0, 0);
             this.lvStatsTable.Name = "lvStatsTable";
-            this.lvStatsTable.Size = new System.Drawing.Size(800, 450);
             this.lvStatsTable.Sorting = System.Windows.Forms.SortOrder.Descending;
-            this.lvStatsTable.TabIndex = 0;
             this.lvStatsTable.UseCompatibleStateImageBehavior = false;
             this.lvStatsTable.View = System.Windows.Forms.View.Details;
             // 
             // lvName
             // 
-            this.lvName.Text = "Name";
-            this.lvName.Width = 106;
+            resources.ApplyResources(this.lvName, "lvName");
             // 
             // lvCurDown
             // 
-            this.lvCurDown.Text = "Down (KiB/s)";
-            this.lvCurDown.Width = 150;
+            resources.ApplyResources(this.lvCurDown, "lvCurDown");
             // 
             // lvCurUp
             // 
-            this.lvCurUp.Text = "Up (KiB/s)";
-            this.lvCurUp.Width = 141;
+            resources.ApplyResources(this.lvCurUp, "lvCurUp");
             // 
             // lvTotalDown
             // 
-            this.lvTotalDown.Text = "Down (MiB)";
-            this.lvTotalDown.Width = 142;
+            resources.ApplyResources(this.lvTotalDown, "lvTotalDown");
             // 
             // lvTotalUp
             // 
-            this.lvTotalUp.Text = "Up (MiB)";
-            this.lvTotalUp.Width = 158;
+            resources.ApplyResources(this.lvTotalUp, "lvTotalUp");
             // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.panel1);
             this.Name = "FormMain";
-            this.Text = "FormMain";
             this.Shown += new System.EventHandler(this.FormMain_Shown);
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);

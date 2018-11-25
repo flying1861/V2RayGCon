@@ -114,13 +114,15 @@ namespace V2RayGCon.Service
         void UpdateCore()
         {
             var servers = Service.Servers.Instance;
+            var pluginServ = Service.PluginsServer.Instance;
 
+            pluginServ.Cleanup();
             var activeServers = servers.GetActiveServersList();
-
             servers.StopAllServersThen(() =>
             {
                 var status = UnzipPackage();
                 NotifyDownloadResults(status);
+                pluginServ.Restart();
                 if (activeServers.Count > 0)
                 {
                     servers.RestartServersByListThen(activeServers);

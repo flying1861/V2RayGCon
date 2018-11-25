@@ -76,7 +76,6 @@ namespace V2RayGCon.Controller
             server = new Service.Core(setting);
             server.OnLog += OnLogHandler;
             server.OnCoreStatusChanged += OnCoreStateChangedHandler;
-            statsSamplingTimer.Elapsed += TakeStatsSample;
         }
 
         #region properties
@@ -84,16 +83,6 @@ namespace V2RayGCon.Controller
         #endregion
 
         #region non-serialize properties
-        [JsonIgnore]
-        ConcurrentQueue<VgcApis.Models.StatsSample> statsSamples =
-            new ConcurrentQueue<VgcApis.Models.StatsSample>();
-
-        [JsonIgnore]
-        System.Timers.Timer statsSamplingTimer = new System.Timers.Timer
-        {
-            Interval = 2000
-        };
-
         [JsonIgnore]
         int statsPort { get; set; }
 
@@ -146,14 +135,24 @@ namespace V2RayGCon.Controller
         #endregion
 
         #region ICoreCtrl interface
-        public ConcurrentQueue<VgcApis.Models.StatsSample> GetSampleData()
-            => this.statsSamples;
         public string GetName() => this.name;
         public string GetStatus() => this.status;
         public string GetConfig() => this.config;
         public bool IsCoreRunning() => this.isServerOn;
         public bool IsUntrack() => this.isUntrack;
         public bool IsSelected() => this.isSelected;
+
+        public VgcApis.Models.StatsSample Peek()
+        {
+            if (!setting.isEnableStatistics)
+            {
+                return null;
+            }
+
+            var up = this.server.QueryStatsApi(this.statsPort, true);
+            var down = this.server.QueryStatsApi(this.statsPort, false);
+            return new VgcApis.Models.StatsSample(up, down);
+        }
         #endregion
 
         #region public method
@@ -387,10 +386,6 @@ namespace V2RayGCon.Controller
 
         public void CleanupThen(Action next)
         {
-            statsSamplingTimer.Enabled = false;
-            statsSamplingTimer.Elapsed -= TakeStatsSample;
-            statsSamplingTimer.Close();
-
             this.server.StopCoreThen(() =>
             {
                 this.server.OnLog -= OnLogHandler;
@@ -527,39 +522,6 @@ namespace V2RayGCon.Controller
         #endregion
 
         #region private method
-        readonly object takeStatsSampleLock = new object();
-        bool isTakingSample = false;
-        void TakeStatsSample(object sender, EventArgs args)
-        {
-            lock (takeStatsSampleLock)
-            {
-                if (isTakingSample)
-                {
-                    return;
-                }
-                isTakingSample = true;
-            }
-
-            var up = this.server.QueryStatsApi(this.statsPort, true);
-            var down = this.server.QueryStatsApi(this.statsPort, false);
-            this.statsSamples.Enqueue(new VgcApis.Models.StatsSample(up, down));
-            TrimStatsSamples();
-            isTakingSample = false;
-        }
-
-        void TrimStatsSamples()
-        {
-            if (statsSamples.Count < 100)
-            {
-                return;
-            }
-            VgcApis.Models.StatsSample blackHole;
-            while (statsSamples.Count >= 5)
-            {
-                statsSamples.TryDequeue(out blackHole);
-            }
-        }
-
         string InjectGlobalImport(string config, bool isIncludeSpeedTest, bool isIncludeActivate)
         {
             JObject import = Lib.Utils.ImportItemList2JObject(
@@ -693,17 +655,6 @@ namespace V2RayGCon.Controller
                 Lib.Utils.GetEnvVarsFromConfig(cfg));
         }
 
-        void StartStatsSampling()
-        {
-            statsSamples = new ConcurrentQueue<VgcApis.Models.StatsSample>();
-            statsSamplingTimer.Enabled = true;
-        }
-
-        void StopStatsSampling()
-        {
-            statsSamplingTimer.Enabled = false;
-        }
-
         void InjectStatsSettingsIntoConfig(ref JObject config)
         {
             if (!setting.isEnableStatistics)
@@ -831,7 +782,6 @@ namespace V2RayGCon.Controller
 #if DEBUG
                 var debug = config.ToString(Formatting.Indented);
 #endif
-
                 return true;
             }
             catch
@@ -916,17 +866,6 @@ namespace V2RayGCon.Controller
         void OnCoreStateChangedHandler(object sender, EventArgs args)
         {
             isServerOn = server.isRunning;
-            if (setting.isEnableStatistics)
-            {
-                if (server.isRunning)
-                {
-                    StartStatsSampling();
-                }
-                else
-                {
-                    StopStatsSampling();
-                }
-            }
             InvokeEventOnPropertyChange();
         }
 
