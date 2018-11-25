@@ -187,7 +187,7 @@ namespace V2RayGCon.Properties {
         }
         
         /// <summary>
-        ///   查找类似 https://raw.githubusercontent.com/nobody3u/V2RayGCon/version/latest.md 的本地化字符串。
+        ///   查找类似 https://raw.githubusercontent.com/nobody3u/V2RayGCon/version/latest.json 的本地化字符串。
         /// </summary>
         internal static string LatestVersionInfoUrl {
             get {
@@ -278,15 +278,6 @@ namespace V2RayGCon.Properties {
         internal static string Text {
             get {
                 return ResourceManager.GetString("Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 1.1.3.9 的本地化字符串。
-        /// </summary>
-        internal static string Version {
-            get {
-                return ResourceManager.GetString("Version", resourceCulture);
             }
         }
         

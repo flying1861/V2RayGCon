@@ -23,6 +23,7 @@ namespace V2RayGCon.Views.WinForms
         Service.Setting setting;
         Service.Servers servers;
         System.Windows.Forms.Timer updateTitleTimer = null;
+        string formTitle = "";
 
         FormMain()
         {
@@ -32,6 +33,8 @@ namespace V2RayGCon.Views.WinForms
             InitializeComponent();
             VgcApis.Libs.UI.AutoSetFormIcon(this);
             Lib.UI.AutoScaleToolSripControls(this, 16);
+            GenFormTitle();
+
             this.Show();
         }
 
@@ -74,13 +77,23 @@ namespace V2RayGCon.Views.WinForms
         }
 
         #region private method
-        private void UpdateFormTitle(object sender, EventArgs args)
+        private void GenFormTitle()
         {
-            var title = string.Format(
+            var version = Lib.Utils.GetAssemblyVersion();
+            if (version.EndsWith(".0"))
+            {
+                var len = version.Length;
+                version = version.Substring(0, len - 2);
+            }
+            formTitle = string.Format(
                 "{0} v{1}",
                 Properties.Resources.AppName,
-                Properties.Resources.Version);
+                version);
+        }
 
+        private void UpdateFormTitle(object sender, EventArgs args)
+        {
+            var title = formTitle;
             if (setting.isPortable)
             {
                 title += " - " + I18N.Portable;

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Management;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -1014,6 +1015,12 @@ namespace V2RayGCon.Lib
         #endregion
 
         #region Miscellaneous
+        public static string GetAssemblyVersion()
+        {
+            Version version = Assembly.GetEntryAssembly().GetName().Version;
+            return version.ToString();
+        }
+
         public static bool AreEqual(double a, double b)
         {
             return Math.Abs(a - b) < 0.000001;

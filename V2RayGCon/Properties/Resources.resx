@@ -126,10 +126,6 @@
   <data name="ProjectLink" xml:space="preserve">
     <value>https://github.com/nobody3u/V2RayGCon</value>
   </data>
-  <data name="Version" xml:space="preserve">
-    <value>1.1.3.9</value>
-    <comment>auto updater</comment>
-  </data>
   <data name="AppName" xml:space="preserve">
     <value>V2RayGCon</value>
   </data>
@@ -196,7 +192,7 @@
     <comment>auto updater need this</comment>
   </data>
   <data name="LatestVersionInfoUrl" xml:space="preserve">
-    <value>https://raw.githubusercontent.com/nobody3u/V2RayGCon/version/latest.md</value>
-    <comment>json</comment>
+    <value>https://raw.githubusercontent.com/nobody3u/V2RayGCon/version/latest.json</value>
+    <comment>auto updater version/latest.json</comment>
   </data>
 </root>

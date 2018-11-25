@@ -59,7 +59,10 @@ namespace V2RayGCon.Service
                     return;
                 }
 
-                setting.isShutdown = isShutdown;
+                if (!setting.isShutdown)
+                {
+                    setting.isShutdown = isShutdown;
+                }
 
                 pluginsServ.Cleanup();
                 notifier.Cleanup();
