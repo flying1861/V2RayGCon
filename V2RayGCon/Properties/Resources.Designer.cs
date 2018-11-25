@@ -90,6 +90,15 @@ namespace V2RayGCon.Properties {
         }
         
         /// <summary>
+        ///   查找类似 https://github.com/nobody3u/V2RayGCon/wiki/Release 的本地化字符串。
+        /// </summary>
+        internal static string ChangeLogUrl {
+            get {
+                return ResourceManager.GetString("ChangeLogUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
         internal static System.Drawing.Bitmap CloseSolution_16x {
@@ -174,6 +183,15 @@ namespace V2RayGCon.Properties {
         internal static string IssueLink {
             get {
                 return ResourceManager.GetString("IssueLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 https://raw.githubusercontent.com/nobody3u/V2RayGCon/version/latest.md 的本地化字符串。
+        /// </summary>
+        internal static string LatestVersionInfoUrl {
+            get {
+                return ResourceManager.GetString("LatestVersionInfoUrl", resourceCulture);
             }
         }
         
@@ -264,7 +282,7 @@ namespace V2RayGCon.Properties {
         }
         
         /// <summary>
-        ///   查找类似 1.1.3.8 的本地化字符串。
+        ///   查找类似 1.1.3.9 的本地化字符串。
         /// </summary>
         internal static string Version {
             get {

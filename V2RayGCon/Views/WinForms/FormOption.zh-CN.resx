@@ -154,6 +154,27 @@
     <value />
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="chkSetUpdateUseProxy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>106, 22</value>
+  </data>
+  <data name="chkSetUpdateUseProxy.Text" xml:space="preserve">
+    <value>使用代理</value>
+  </data>
+  <data name="chkSetUpdateUseProxy.ToolTip" xml:space="preserve">
+    <value>随机选一个运行中的HTTP代理用于升级</value>
+  </data>
+  <data name="rbtnSetUpdateVgcLite.ToolTip" xml:space="preserve">
+    <value>自动更新将下载V2RayGCon简化版（防defender)</value>
+  </data>
+  <data name="rbtnSetUpdateToVgcFull.ToolTip" xml:space="preserve">
+    <value>自动更新将下载V2RayGCon完整版</value>
+  </data>
+  <data name="groupBox2.Text" xml:space="preserve">
+    <value>自动更新</value>
+  </data>
+  <data name="groupBox2.ToolTip" xml:space="preserve">
+    <value />
+  </data>
   <data name="chkSetUseV4.Size" type="System.Drawing.Size, System.Drawing">
     <value>160, 22</value>
   </data>

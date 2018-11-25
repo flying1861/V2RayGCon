@@ -11,7 +11,9 @@ namespace V2RayGCon.Controller.OptionComponent
         CheckBox chkServAutoTrack = null,
             chkPortableMode = null,
             chkSetUseV4 = null,
-            chkSetEnableStat = null;
+            chkSetEnableStat = null,
+            chkSetUpdateUseProxy = null;
+        RadioButton rbtnSetUpdateVgcFull = null;
 
         public TabSetting(
             ComboBox cboxLanguage,
@@ -19,7 +21,9 @@ namespace V2RayGCon.Controller.OptionComponent
             CheckBox chkServAutoTrack,
             CheckBox chkPortableMode,
             CheckBox chkSetUseV4,
-            CheckBox chkSetEnableStat)
+            CheckBox chkSetEnableStat,
+            RadioButton rbtnSetUpdateVgcFull,
+            CheckBox chkSetUpdateUseProxy)
         {
             this.setting = Service.Setting.Instance;
             this.servers = Service.Servers.Instance;
@@ -31,24 +35,16 @@ namespace V2RayGCon.Controller.OptionComponent
             this.chkPortableMode = chkPortableMode;
             this.chkSetUseV4 = chkSetUseV4;
             this.chkSetEnableStat = chkSetEnableStat;
+            this.rbtnSetUpdateVgcFull = rbtnSetUpdateVgcFull;
+            this.chkSetUpdateUseProxy = chkSetUpdateUseProxy;
 
-            InitElement(
-                cboxLanguage,
-                cboxPageSize,
-                chkServAutoTrack,
-                chkPortableMode,
-                chkSetUseV4,
-                chkSetEnableStat);
+            InitElement();
         }
 
-        private void InitElement(
-            ComboBox cboxLanguage,
-            ComboBox cboxPageSize,
-            CheckBox chkServAutoTrack,
-            CheckBox chkPortableMode,
-            CheckBox chkSetUseV4,
-            CheckBox chkSetEnableStat)
+        private void InitElement()
         {
+            chkSetUpdateUseProxy.Checked = setting.isUpdateUseProxy;
+            rbtnSetUpdateVgcFull.Checked = setting.isUpdateToVgcFull;
             chkSetEnableStat.Checked = setting.isEnableStatistics;
             chkSetUseV4.Checked = setting.isUseV4;
             chkPortableMode.Checked = setting.isPortable;
@@ -91,6 +87,8 @@ namespace V2RayGCon.Controller.OptionComponent
                 servers.UpdateTrackerSettingNow();
             }
 
+            setting.isUpdateUseProxy = chkSetUpdateUseProxy.Checked;
+            setting.isUpdateToVgcFull = rbtnSetUpdateVgcFull.Checked;
             setting.isPortable = chkPortableMode.Checked;
             setting.isUseV4 = chkSetUseV4.Checked;
 
@@ -105,6 +103,8 @@ namespace V2RayGCon.Controller.OptionComponent
         public override bool IsOptionsChanged()
         {
             if (setting.isUseV4 != chkSetUseV4.Checked
+                || setting.isUpdateUseProxy != chkSetUpdateUseProxy.Checked
+                || setting.isUpdateToVgcFull != rbtnSetUpdateVgcFull.Checked
                 || setting.isEnableStatistics != chkSetEnableStat.Checked
                 || setting.isPortable != chkPortableMode.Checked
                 || Lib.Utils.Str2Int(cboxPageSize.Text) != setting.serverPanelPageSize)

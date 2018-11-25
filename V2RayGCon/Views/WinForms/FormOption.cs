@@ -80,7 +80,9 @@ namespace V2RayGCon.Views.WinForms
                     chkSetServAutotrack,
                     chkSetSysPortable,
                     chkSetUseV4,
-                    chkSetServStatistics));
+                    chkSetServStatistics,
+                    rbtnSetUpdateToVgcFull,
+                    chkSetUpdateUseProxy));
 
             return ctrl;
         }

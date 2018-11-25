@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
@@ -15,7 +13,6 @@ namespace V2RayGCon.Controller.FormMainComponent
             ToolStripMenuItem miImportLinkFromClipboard,
             ToolStripMenuItem miExportAllServer,
             ToolStripMenuItem importFromFile,
-            ToolStripMenuItem miCheckUpdate,
             ToolStripMenuItem miAbout,
             ToolStripMenuItem miHelp,
             ToolStripMenuItem miFormConfigEditor,
@@ -29,7 +26,7 @@ namespace V2RayGCon.Controller.FormMainComponent
 
             InitMenuFile(miSimVmessServer, miImportLinkFromClipboard, miExportAllServer, importFromFile);
             InitMenuWindows(miFormConfigEditor, miFormQRCode, miFormLog, miFormOptions);
-            InitMenuAbout(miCheckUpdate, miAbout, miHelp, miDownloadV2rayCore, miRemoveV2rayCore);
+            InitMenuAbout(miAbout, miHelp, miDownloadV2rayCore, miRemoveV2rayCore);
         }
 
         #region public method
@@ -78,26 +75,17 @@ namespace V2RayGCon.Controller.FormMainComponent
             }
         }
 
-        public void CheckVGCUpdate()
-        {
-            Task.Factory.StartNew(CheckUpdate);
-        }
-
         public override bool RefreshUI() { return false; }
-        public override void Cleanup()
-        {
-        }
+        public override void Cleanup() { }
         #endregion
 
         #region private method
-        private void InitMenuAbout(ToolStripMenuItem checkUpdate, ToolStripMenuItem about, ToolStripMenuItem help, ToolStripMenuItem downloadV2rayCore, ToolStripMenuItem removeV2rayCore)
+        private void InitMenuAbout(ToolStripMenuItem about, ToolStripMenuItem help, ToolStripMenuItem downloadV2rayCore, ToolStripMenuItem removeV2rayCore)
         {
             // menu about
             downloadV2rayCore.Click += (s, a) => Views.WinForms.FormDownloadCore.GetForm();
 
             removeV2rayCore.Click += (s, a) => RemoveV2RayCore();
-
-            checkUpdate.Click += (s, a) => CheckVGCUpdate();
 
             about.Click += (s, a) =>
                 Lib.UI.VisitUrl(I18N.VistPorjectPage, Properties.Resources.ProjectLink);
@@ -161,35 +149,6 @@ namespace V2RayGCon.Controller.FormMainComponent
                 }
                 MessageBox.Show(I18N.Done);
             });
-        }
-
-        private void CheckUpdate()
-        {
-            var version = Lib.Utils.GetLatestVGCVersion();
-            if (string.IsNullOrEmpty(version))
-            {
-                MessageBox.Show(I18N.GetVGCVerFail);
-                return;
-            }
-
-            var verNew = new Version(version);
-            var verCur = new Version(Properties.Resources.Version);
-
-            var result = verCur.CompareTo(verNew);
-            if (result >= 0)
-            {
-                MessageBox.Show(I18N.NoNewVGC);
-                return;
-            }
-
-            var confirmTpl = I18N.ConfirmDownloadNewVGC;
-            var msg = string.Format(confirmTpl, version);
-            if (Lib.UI.Confirm(msg))
-            {
-                var tpl = StrConst.TplUrlVGCRelease;
-                var url = string.Format(tpl, version);
-                System.Diagnostics.Process.Start(url);
-            }
         }
         #endregion
     }

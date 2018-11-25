@@ -151,7 +151,6 @@ namespace V2RayGCon.Views.WinForms
                 toolMenuItemImportLinkFromClipboard,
                 toolMenuItemExportAllServerToFile,
                 toolMenuItemImportFromFile,
-                toolMenuItemCheckUpdate,
                 toolMenuItemAbout,
                 toolMenuItemHelp,
                 toolMenuItemConfigEditor,
@@ -160,6 +159,10 @@ namespace V2RayGCon.Views.WinForms
                 toolMenuItemOptions,
                 toolStripMenuItemDownLoadV2rayCore,
                 toolStripMenuItemRemoveV2rayCore));
+
+            ctrl.Plug(new Controller.FormMainComponent.MenuItemVgcAutoUpdate(
+                toolMenuItemCheckUpdate
+                ));
 
             ctrl.Plug(new Controller.FormMainComponent.MenuItemsSelect(
                 /*

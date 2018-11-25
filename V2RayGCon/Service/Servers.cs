@@ -699,6 +699,26 @@ namespace V2RayGCon.Service
 
         #region public method
         /// <summary>
+        /// return -1 when fail
+        /// </summary>
+        /// <returns></returns>
+        public int GetAvailableHttpProxyPort()
+        {
+            var list = GetServerList().Where(s => s.isServerOn);
+
+            foreach (var serv in list)
+            {
+                if (serv.IsSuitableToBeUsedAsSysProxy(
+                    true, out bool isSocks, out int port))
+                {
+                    return port;
+                }
+            }
+            return -1;
+        }
+
+
+        /// <summary>
         /// ref means config will change after the function is executed.
         /// </summary>
         /// <param name="config"></param>

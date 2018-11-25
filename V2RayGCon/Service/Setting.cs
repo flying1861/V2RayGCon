@@ -64,6 +64,26 @@ namespace V2RayGCon.Service
             }
         }
 
+        public bool isUpdateUseProxy
+        {
+            get => userSettings.isUpdateUseProxy;
+            set
+            {
+                userSettings.isUpdateUseProxy = value;
+                LazySaveUserSettings();
+            }
+        }
+
+        public bool isUpdateToVgcFull
+        {
+            get => userSettings.isUpdateToVgcFull;
+            set
+            {
+                userSettings.isUpdateToVgcFull = value;
+                LazySaveUserSettings();
+            }
+        }
+
         public bool isPortable
         {
             get

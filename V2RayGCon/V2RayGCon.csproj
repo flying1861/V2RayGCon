@@ -98,8 +98,11 @@
     <CodeAnalysisRuleSet>V2RayGCon.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DotNetZip, Version=1.11.0.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetZip.1.11.0\lib\net20\DotNetZip.dll</HintPath>
+    <Reference Include="AutoUpdater.NET, Version=1.4.11.0, Culture=neutral, PublicKeyToken=501435c91b35f4bc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autoupdater.NET.Official.1.4.11\lib\net40\AutoUpdater.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetZip, Version=1.12.0.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.12.0\lib\net20\DotNetZip.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -139,6 +142,7 @@
     <Compile Include="Controller\FormMainComponent\MenuItemsSelect.cs" />
     <Compile Include="Controller\FormMainComponent\MenuItemsServer.cs" />
     <Compile Include="Controller\FormMainComponent\MenuItemsBasic.cs" />
+    <Compile Include="Controller\FormMainComponent\MenuItemVgcAutoUpdate.cs" />
     <Compile Include="Controller\FormMainCtrl.cs" />
     <Compile Include="Controller\ConfigerComponent\Quick.cs" />
     <Compile Include="Controller\OptionComponent\OptionComponentController.cs" />
@@ -165,6 +169,7 @@
     <Compile Include="Controller\ConfigerComponent\ConfigerComponentController.cs" />
     <Compile Include="Model\Data\PluginInfoItem.cs" />
     <Compile Include="Model\Data\ServerTracker.cs" />
+    <Compile Include="Model\Data\UpdateInfo.cs" />
     <Compile Include="Model\Data\UserSettings.cs" />
     <Compile Include="Service\Core.cs" />
     <Compile Include="Model\BaseClass\ICacheComponent.cs" />
@@ -498,7 +503,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>set "libsDir=libs\"
-set "fileList=Statistics Pacman ProxySetter DotNetZip Newtonsoft ScintillaNET VgcApis zxing"
+set "fileList=Statistics Pacman ProxySetter DotNetZip Newtonsoft ScintillaNET VgcApis zxing AutoUpdater.NET"
 
 call:CreateFolderOnDemand "%25libsDir%25"
 call:MoveFilesByList "%25fileList%25"
